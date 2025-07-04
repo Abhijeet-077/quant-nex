@@ -38,8 +38,9 @@ export const rateLimiters = {
 export const speedLimiter = slowDown({
   windowMs: 15 * 60 * 1000, // 15 minutes
   delayAfter: 50, // Allow 50 requests per windowMs without delay
-  delayMs: 500, // Add 500ms delay per request after delayAfter
+  delayMs: () => 500, // Add 500ms delay per request after delayAfter
   maxDelayMs: 20000, // Maximum delay of 20 seconds
+  validate: { delayMs: false }, // Disable the warning
 })
 
 // Input validation schemas for medical data
@@ -63,7 +64,9 @@ export const AppointmentSchema = z.object({
   id: z.string().uuid().optional(),
   patientId: z.string().uuid(),
   doctorId: z.string().uuid(),
-  date: z.string().datetime(),
+  appointmentDate: z.string().refine((date) => !isNaN(Date.parse(date)), 'Invalid date'),
+  appointmentTime: z.string().regex(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/, 'Invalid time format (HH:MM)'),
+  durationMinutes: z.number().min(15).max(480).optional().default(60),
   type: z.enum(["consultation", "follow-up", "treatment", "telemedicine"]),
   status: z.enum(["scheduled", "confirmed", "completed", "cancelled"]),
   notes: z.string().max(1000).optional(),
@@ -98,9 +101,17 @@ export const MedicalRecordDataSchema = z.object({
 })
 
 // API Security middleware
+interface AuthenticatedUser {
+  id: string
+  email: string
+  role?: string
+  permissions?: string[]
+  sessionId?: string
+}
+
 export async function withApiSecurity(
   request: NextRequest,
-  handler: (req: NextRequest, context: { user: any }) => Promise<NextResponse>,
+  handler: (req: NextRequest, context: { user: AuthenticatedUser }) => Promise<NextResponse>,
   options: {
     requireAuth?: boolean
     requiredPermissions?: string[]

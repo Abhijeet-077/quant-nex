@@ -4,12 +4,11 @@ import { patientOperations, auditLogOperations } from '@/lib/database'
 
 // GET /api/patients/[id] - Get specific patient
 async function handleGetPatient(
-  request: NextRequest, 
-  context: { user: any },
-  { params }: { params: { id: string } }
+  request: NextRequest,
+  context: { user: any, params: { id: string } }
 ) {
   try {
-    const patientId = params.id
+    const patientId = context.params.id
 
     if (!patientId) {
       return NextResponse.json(
@@ -114,7 +113,7 @@ async function handleGetPatient(
       userAgent: request.headers.get('user-agent') || 'unknown',
       sessionId: context.user.sessionId || 'unknown',
       outcome: 'FAILURE',
-      details: { error: error.message },
+      details: { error: error instanceof Error ? error.message : String(error) },
       phiAccessed: false,
       dataClassification: 'RESTRICTED',
     })
@@ -128,12 +127,11 @@ async function handleGetPatient(
 
 // PUT /api/patients/[id] - Update patient
 async function handleUpdatePatient(
-  request: NextRequest, 
-  context: { user: any },
-  { params }: { params: { id: string } }
+  request: NextRequest,
+  context: { user: any, params: { id: string } }
 ) {
   try {
-    const patientId = params.id
+    const patientId = context.params.id
     const body = await request.json()
 
     if (!patientId) {
@@ -236,7 +234,7 @@ async function handleUpdatePatient(
       userAgent: request.headers.get('user-agent') || 'unknown',
       sessionId: context.user.sessionId || 'unknown',
       outcome: 'FAILURE',
-      details: { error: error.message },
+      details: { error: error instanceof Error ? error.message : String(error) },
       phiAccessed: false,
       dataClassification: 'RESTRICTED',
     })
@@ -251,9 +249,10 @@ async function handleUpdatePatient(
 // GET handler
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
-  return withApiSecurity(request, (req, context) => handleGetPatient(req, context, { params }), {
+  const resolvedParams = await params
+  return withApiSecurity(request, (req, context) => handleGetPatient(req, { ...context, params: resolvedParams }), {
     requireAuth: true,
     requiredPermissions: ['patient_read'],
     rateLimit: 'patients',
@@ -263,9 +262,10 @@ export async function GET(
 // PUT handler
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
-  return withApiSecurity(request, (req, context) => handleUpdatePatient(req, context, { params }), {
+  const resolvedParams = await params
+  return withApiSecurity(request, (req, context) => handleUpdatePatient(req, { ...context, params: resolvedParams }), {
     requireAuth: true,
     requiredPermissions: ['patient_write'],
     rateLimit: 'patients',

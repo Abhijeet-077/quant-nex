@@ -63,7 +63,7 @@ async function handleGetAppointments(request: NextRequest, context: { user: { id
       userAgent: request.headers.get('user-agent') || 'unknown',
       sessionId: context.user.sessionId || 'unknown',
       outcome: 'FAILURE',
-      details: { error: error.message },
+      details: { error: error instanceof Error ? error.message : String(error) },
       phiAccessed: false,
       dataClassification: 'RESTRICTED',
     })
@@ -88,6 +88,7 @@ async function handleCreateAppointment(request: NextRequest, context: { user: an
       ...validatedData,
       appointmentDate: new Date(validatedData.appointmentDate),
       type: validatedData.type.toUpperCase() as 'CONSULTATION' | 'FOLLOW_UP' | 'TREATMENT' | 'TELEMEDICINE' | 'EMERGENCY',
+      status: validatedData.status.toUpperCase() as 'SCHEDULED' | 'CONFIRMED' | 'COMPLETED' | 'CANCELLED',
       createdById: context.user.id,
     }
 

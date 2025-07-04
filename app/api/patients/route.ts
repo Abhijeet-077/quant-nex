@@ -56,7 +56,7 @@ async function handleGetPatients(request: NextRequest, context: { user: any }) {
       userAgent: request.headers.get('user-agent') || 'unknown',
       sessionId: context.user.sessionId || 'unknown',
       outcome: 'FAILURE',
-      details: { error: error.message },
+      details: { error: error instanceof Error ? error.message : String(error) },
       phiAccessed: false,
       dataClassification: 'RESTRICTED',
     })
@@ -133,7 +133,7 @@ async function handleCreatePatient(request: NextRequest, context: { user: any })
       userAgent: request.headers.get('user-agent') || 'unknown',
       sessionId: context.user.sessionId || 'unknown',
       outcome: 'FAILURE',
-      details: { error: error.message },
+      details: { error: error instanceof Error ? error.message : String(error) },
       phiAccessed: false,
       dataClassification: 'RESTRICTED',
     })

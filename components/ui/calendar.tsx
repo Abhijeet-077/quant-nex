@@ -1,66 +1,111 @@
 "use client"
 
 import * as React from "react"
-import { ChevronLeft, ChevronRight } from "lucide-react"
-import { DayPicker } from "react-day-picker"
-
+import { Calendar as CalendarIcon } from "lucide-react"
 import { cn } from "@/lib/utils"
-import { buttonVariants } from "@/components/ui/button"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import { format } from "date-fns"
 
-export type CalendarProps = React.ComponentProps<typeof DayPicker>
+export interface CalendarProps {
+  className?: string
+  selected?: Date
+  onSelect?: (date: Date | undefined) => void
+  disabled?: (date: Date) => boolean
+  mode?: "single" | "multiple" | "range"
+  placeholder?: string
+}
 
 function Calendar({
   className,
-  classNames,
-  showOutsideDays = true,
+  selected,
+  onSelect,
+  disabled,
+  mode = "single",
+  placeholder = "Pick a date",
   ...props
 }: CalendarProps) {
+  const [isOpen, setIsOpen] = React.useState(false)
+  const [inputValue, setInputValue] = React.useState("")
+
+  React.useEffect(() => {
+    if (selected) {
+      setInputValue(format(selected, "yyyy-MM-dd"))
+    }
+  }, [selected])
+
+  const handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value
+    setInputValue(value)
+
+    if (value) {
+      const date = new Date(value)
+      if (!isNaN(date.getTime())) {
+        onSelect?.(date)
+      }
+    } else {
+      onSelect?.(undefined)
+    }
+  }
+
+  const handleButtonClick = () => {
+    setIsOpen(!isOpen)
+  }
+
   return (
-    <DayPicker
-      showOutsideDays={showOutsideDays}
-      className={cn("p-3", className)}
-      classNames={{
-        months: "flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0",
-        month: "space-y-4",
-        caption: "flex justify-center pt-1 relative items-center",
-        caption_label: "text-sm font-medium",
-        nav: "space-x-1 flex items-center",
-        nav_button: cn(
-          buttonVariants({ variant: "outline" }),
-          "h-7 w-7 bg-transparent p-0 opacity-50 hover:opacity-100"
-        ),
-        nav_button_previous: "absolute left-1",
-        nav_button_next: "absolute right-1",
-        table: "w-full border-collapse space-y-1",
-        head_row: "flex",
-        head_cell:
-          "text-muted-foreground rounded-md w-9 font-normal text-[0.8rem]",
-        row: "flex w-full mt-2",
-        cell: "h-9 w-9 text-center text-sm p-0 relative [&:has([aria-selected].day-range-end)]:rounded-r-md [&:has([aria-selected].day-outside)]:bg-accent/50 [&:has([aria-selected])]:bg-accent first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md focus-within:relative focus-within:z-20",
-        day: cn(
-          buttonVariants({ variant: "ghost" }),
-          "h-9 w-9 p-0 font-normal aria-selected:opacity-100"
-        ),
-        day_range_end: "day-range-end",
-        day_selected:
-          "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground focus:bg-primary focus:text-primary-foreground",
-        day_today: "bg-accent text-accent-foreground",
-        day_outside:
-          "day-outside text-muted-foreground aria-selected:bg-accent/50 aria-selected:text-muted-foreground",
-        day_disabled: "text-muted-foreground opacity-50",
-        day_range_middle:
-          "aria-selected:bg-accent aria-selected:text-accent-foreground",
-        day_hidden: "invisible",
-        ...classNames,
-      }}
-      components={{
-        IconLeft: ({ ...props }) => <ChevronLeft className="h-4 w-4" />,
-        IconRight: ({ ...props }) => <ChevronRight className="h-4 w-4" />,
-      }}
-      {...props}
-    />
+    <div className={cn("grid gap-2", className)}>
+      <Popover open={isOpen} onOpenChange={setIsOpen}>
+        <PopoverTrigger asChild>
+          <Button
+            variant="outline"
+            className={cn(
+              "w-full justify-start text-left font-normal",
+              !selected && "text-muted-foreground"
+            )}
+            onClick={handleButtonClick}
+          >
+            <CalendarIcon className="mr-2 h-4 w-4" />
+            {selected ? format(selected, "PPP") : <span>{placeholder}</span>}
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent className="w-auto p-4" align="start">
+          <div className="space-y-4">
+            <div className="text-sm font-medium">Select Date</div>
+            <Input
+              type="date"
+              value={inputValue}
+              onChange={handleDateChange}
+              className="w-full"
+              min={disabled ? undefined : "1900-01-01"}
+              max={disabled ? undefined : "2100-12-31"}
+            />
+            <div className="flex justify-end space-x-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => {
+                  setInputValue("")
+                  onSelect?.(undefined)
+                  setIsOpen(false)
+                }}
+              >
+                Clear
+              </Button>
+              <Button
+                size="sm"
+                onClick={() => setIsOpen(false)}
+              >
+                Done
+              </Button>
+            </div>
+          </div>
+        </PopoverContent>
+      </Popover>
+    </div>
   )
 }
+
 Calendar.displayName = "Calendar"
 
 export { Calendar }

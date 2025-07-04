@@ -182,7 +182,7 @@ export function escapeHtml(unsafe: string): string {
 }
 
 // Medical data anonymization for logs
-export function anonymizePatientData(data: any): any {
+export function anonymizePatientData(data: Record<string, unknown>): Record<string, unknown> {
   const anonymized = { ...data }
   
   // Remove or hash sensitive fields

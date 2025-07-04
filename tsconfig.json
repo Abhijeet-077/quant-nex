@@ -49,8 +49,7 @@
       "@/hooks/*": ["./hooks/*"],
       "@/types/*": ["./types/*"],
       "@/utils/*": ["./utils/*"],
-      "@/styles/*": ["./styles/*"],
-      "@/test-utils": ["__tests__/utils/test-utils.tsx"]
+      "@/styles/*": ["./styles/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
