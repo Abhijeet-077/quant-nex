@@ -1,0 +1,276 @@
+// Prisma schema for Quant-NEX Medical Application
+// This schema defines the database structure for HIPAA-compliant medical data
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// User model for medical professionals
+model User {
+  id              String   @id @default(cuid())
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+  
+  // Authentication
+  email           String   @unique
+  emailVerified   DateTime? @map("email_verified")
+  
+  // Personal Information
+  firstName       String   @map("first_name")
+  lastName        String   @map("last_name")
+  phone           String?
+  avatarUrl       String?  @map("avatar_url")
+  
+  // Professional Information
+  role            UserRole
+  specialization  String?
+  licenseNumber   String   @unique @map("license_number")
+  department      String
+  permissions     String[]
+  
+  // Status
+  isActive        Boolean  @default(true) @map("is_active")
+  lastLogin       DateTime? @map("last_login")
+  
+  // Relationships
+  patientsAssigned Patient[] @relation("AssignedDoctor")
+  appointmentsAsDoctor Appointment[] @relation("DoctorAppointments")
+  medicalRecordsAuthored MedicalRecord[] @relation("RecordAuthor")
+  auditLogs       AuditLog[]
+  createdAppointments Appointment[] @relation("AppointmentCreator")
+  
+  @@map("users")
+}
+
+// Patient model for medical records
+model Patient {
+  id                    String   @id @default(cuid())
+  createdAt             DateTime @default(now()) @map("created_at")
+  updatedAt             DateTime @updatedAt @map("updated_at")
+  
+  // Personal Information
+  firstName             String   @map("first_name")
+  lastName              String   @map("last_name")
+  email                 String?  @unique
+  phone                 String?
+  dateOfBirth           DateTime @map("date_of_birth")
+  gender                Gender
+  address               String?
+  
+  // Emergency Contact
+  emergencyContactName  String?  @map("emergency_contact_name")
+  emergencyContactPhone String?  @map("emergency_contact_phone")
+  
+  // Medical Information
+  medicalRecordNumber   String   @unique @map("medical_record_number")
+  cancerType            String?  @map("cancer_type")
+  cancerStage           CancerStage? @map("cancer_stage")
+  diagnosisDate         DateTime? @map("diagnosis_date")
+  treatmentStatus       TreatmentStatus @default(ACTIVE) @map("treatment_status")
+  treatmentProgress     Int      @default(0) @map("treatment_progress") // 0-100
+  
+  // Visit Information
+  lastVisit             DateTime? @map("last_visit")
+  nextAppointment       DateTime? @map("next_appointment")
+  
+  // Medical History
+  medicalHistory        String?  @map("medical_history")
+  allergies             String[]
+  currentMedications    String[] @map("current_medications")
+  familyHistory         String?  @map("family_history")
+  
+  // Insurance Information
+  insuranceProvider     String?  @map("insurance_provider")
+  insurancePolicyNumber String?  @map("insurance_policy_number")
+  
+  // Relationships
+  assignedDoctorId      String?  @map("assigned_doctor_id")
+  assignedDoctor        User?    @relation("AssignedDoctor", fields: [assignedDoctorId], references: [id])
+  appointments          Appointment[]
+  medicalRecords        MedicalRecord[]
+  auditLogs             AuditLog[]
+  
+  @@map("patients")
+}
+
+// Appointment model for scheduling
+model Appointment {
+  id                      String   @id @default(cuid())
+  createdAt               DateTime @default(now()) @map("created_at")
+  updatedAt               DateTime @updatedAt @map("updated_at")
+  
+  // Appointment Details
+  appointmentDate         DateTime @map("appointment_date")
+  appointmentTime         String   @map("appointment_time") // Store as time string
+  durationMinutes         Int      @default(30) @map("duration_minutes")
+  type                    AppointmentType
+  status                  AppointmentStatus @default(SCHEDULED)
+  
+  // Location
+  location                String?
+  roomNumber              String?  @map("room_number")
+  
+  // Notes and Instructions
+  notes                   String?
+  preparationInstructions String?  @map("preparation_instructions")
+  
+  // Reminder System
+  reminderSent            Boolean  @default(false) @map("reminder_sent")
+  
+  // Relationships
+  patientId               String   @map("patient_id")
+  patient                 Patient  @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  
+  doctorId                String   @map("doctor_id")
+  doctor                  User     @relation("DoctorAppointments", fields: [doctorId], references: [id])
+  
+  createdById             String   @map("created_by")
+  createdBy               User     @relation("AppointmentCreator", fields: [createdById], references: [id])
+  
+  medicalRecords          MedicalRecord[]
+  
+  @@map("appointments")
+}
+
+// Medical Record model for patient documentation
+model MedicalRecord {
+  id                    String   @id @default(cuid())
+  createdAt             DateTime @default(now()) @map("created_at")
+  updatedAt             DateTime @updatedAt @map("updated_at")
+  
+  // Record Information
+  recordType            RecordType @map("record_type")
+  title                 String
+  content               String   // Main content of the record
+  recordDate            DateTime @map("record_date")
+  
+  // File Attachments
+  attachments           String[] // URLs to stored files
+  
+  // Security and Classification
+  isConfidential        Boolean  @default(false) @map("is_confidential")
+  tags                  String[] // For categorization and search
+  
+  // Relationships
+  patientId             String   @map("patient_id")
+  patient               Patient  @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  
+  authorId              String   @map("author_id")
+  author                User     @relation("RecordAuthor", fields: [authorId], references: [id])
+  authorName            String   @map("author_name") // Denormalized for audit trail
+  
+  relatedAppointmentId  String?  @map("related_appointment_id")
+  relatedAppointment    Appointment? @relation(fields: [relatedAppointmentId], references: [id])
+  
+  @@map("medical_records")
+}
+
+// Audit Log model for HIPAA compliance
+model AuditLog {
+  id                String   @id @default(cuid())
+  createdAt         DateTime @default(now()) @map("created_at")
+  
+  // User Information
+  userId            String   @map("user_id")
+  user              User     @relation(fields: [userId], references: [id])
+  userEmail         String   @map("user_email")
+  
+  // Action Information
+  action            String   // What action was performed
+  resourceType      String   @map("resource_type") // What type of resource
+  resourceId        String   @map("resource_id") // ID of the resource
+  
+  // Patient Information (if applicable)
+  patientId         String?  @map("patient_id")
+  patient           Patient? @relation(fields: [patientId], references: [id])
+  
+  // Session Information
+  ipAddress         String   @map("ip_address")
+  userAgent         String   @map("user_agent")
+  sessionId         String   @map("session_id")
+  
+  // Outcome and Details
+  outcome           AuditOutcome
+  details           Json?    // Additional details about the action
+  
+  // HIPAA Compliance
+  phiAccessed       Boolean  @default(false) @map("phi_accessed") // Protected Health Information
+  dataClassification DataClassification @map("data_classification")
+  
+  @@map("audit_logs")
+}
+
+// Enums for type safety
+enum UserRole {
+  DOCTOR
+  NURSE
+  ADMIN
+  RESEARCHER
+  TECHNICIAN
+}
+
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
+}
+
+enum CancerStage {
+  I
+  II
+  III
+  IV
+}
+
+enum TreatmentStatus {
+  ACTIVE
+  REMISSION
+  CRITICAL
+  DECEASED
+  INACTIVE
+}
+
+enum AppointmentType {
+  CONSULTATION
+  FOLLOW_UP
+  TREATMENT
+  TELEMEDICINE
+  EMERGENCY
+}
+
+enum AppointmentStatus {
+  SCHEDULED
+  CONFIRMED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+  NO_SHOW
+}
+
+enum RecordType {
+  LAB_RESULT
+  IMAGING
+  PATHOLOGY
+  TREATMENT_NOTE
+  PROGRESS_NOTE
+  DISCHARGE_SUMMARY
+}
+
+enum AuditOutcome {
+  SUCCESS
+  FAILURE
+  UNAUTHORIZED
+}
+
+enum DataClassification {
+  PUBLIC
+  INTERNAL
+  CONFIDENTIAL
+  RESTRICTED
+}

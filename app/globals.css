@@ -1,0 +1,378 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+
+    --primary: 271 91% 65%;
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 271 91% 65%;
+
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    /* High-contrast dark theme with deep black backgrounds */
+    --background: 0 0% 0%; /* Pure black background */
+    --foreground: 0 0% 100%; /* Pure white text */
+
+    --card: 0 0% 2%; /* Very dark card background */
+    --card-foreground: 0 0% 100%; /* Pure white card text */
+
+    --popover: 0 0% 2%;
+    --popover-foreground: 0 0% 100%;
+
+    --primary: 217 91% 60%; /* Bright blue primary */
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 0 0% 8%; /* Dark secondary */
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 0 0% 8%;
+    --muted-foreground: 0 0% 70%; /* Light gray for muted text */
+
+    --accent: 0 0% 8%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 217 50% 15%; /* Subtle blue border */
+    --input: 0 0% 8%;
+    --ring: 217 91% 60%; /* Bright blue focus ring */
+
+    /* Custom variables for glowing effects */
+    --glow-primary: 217 91% 60%;
+    --glow-secondary: 200 100% 50%;
+    --glow-accent: 180 100% 50%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Custom styles for Quant-NEX - Enhanced High-Contrast Theme */
+.glow-text {
+  text-shadow:
+    0 0 5px rgba(59, 130, 246, 0.8),
+    0 0 10px rgba(59, 130, 246, 0.6),
+    0 0 20px rgba(59, 130, 246, 0.4);
+}
+
+.glow-border {
+  box-shadow:
+    0 0 10px rgba(59, 130, 246, 0.6),
+    0 0 20px rgba(59, 130, 246, 0.4),
+    0 0 30px rgba(59, 130, 246, 0.2),
+    inset 0 0 10px rgba(59, 130, 246, 0.1);
+}
+
+.glow-border-subtle {
+  box-shadow:
+    0 0 5px rgba(59, 130, 246, 0.3),
+    0 0 10px rgba(59, 130, 246, 0.2),
+    inset 0 0 5px rgba(59, 130, 246, 0.05);
+}
+
+.neon-glow {
+  filter: drop-shadow(0 0 8px rgba(59, 130, 246, 0.8));
+}
+
+.card-glow {
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  box-shadow:
+    0 0 20px rgba(59, 130, 246, 0.1),
+    inset 0 0 20px rgba(59, 130, 246, 0.05);
+}
+
+.button-glow {
+  box-shadow:
+    0 0 10px rgba(59, 130, 246, 0.4),
+    0 0 20px rgba(59, 130, 246, 0.2);
+  transition: all 0.3s ease;
+}
+
+.button-glow:hover {
+  box-shadow:
+    0 0 15px rgba(59, 130, 246, 0.6),
+    0 0 30px rgba(59, 130, 246, 0.4),
+    0 0 45px rgba(59, 130, 246, 0.2);
+  transform: translateY(-1px);
+}
+
+/* Gradient animations */
+@keyframes gradient-shift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.animate-gradient {
+  background-size: 200% 200%;
+  animation: gradient-shift 5s ease infinite;
+}
+
+/* Responsive utilities */
+.mobile-padding {
+  @apply px-4 sm:px-6;
+}
+
+.mobile-text {
+  @apply text-sm sm:text-base;
+}
+
+.mobile-heading {
+  @apply text-xl sm:text-2xl lg:text-3xl;
+}
+
+.mobile-grid {
+  @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4;
+}
+
+.mobile-flex {
+  @apply flex flex-col sm:flex-row sm:items-center;
+}
+
+.mobile-button {
+  @apply w-full sm:w-auto;
+}
+
+/* Improved mobile touch targets */
+@media (max-width: 768px) {
+  button, .button {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  input, select, textarea {
+    min-height: 44px;
+  }
+}
+
+/* WCAG 2.1 AA Accessibility Styles */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.sr-only:focus {
+  position: static;
+  width: auto;
+  height: auto;
+  padding: inherit;
+  margin: inherit;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
+}
+
+/* High Contrast Mode */
+.high-contrast {
+  --background: 0 0% 0%;
+  --foreground: 0 0% 100%;
+  --border: 0 0% 100%;
+  --ring: 217 91% 70%;
+}
+
+.high-contrast * {
+  border-color: rgba(255, 255, 255, 0.5) !important;
+}
+
+.high-contrast .text-gray-300,
+.high-contrast .text-gray-400,
+.high-contrast .text-gray-500 {
+  color: rgba(255, 255, 255, 0.9) !important;
+}
+
+/* Large Text Mode */
+.large-text {
+  font-size: 1.25em;
+}
+
+.large-text h1 { font-size: 2.5rem; }
+.large-text h2 { font-size: 2rem; }
+.large-text h3 { font-size: 1.75rem; }
+.large-text h4 { font-size: 1.5rem; }
+.large-text h5 { font-size: 1.25rem; }
+.large-text h6 { font-size: 1.125rem; }
+
+/* Reduced Motion */
+.reduced-motion *,
+.reduced-motion *::before,
+.reduced-motion *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+  scroll-behavior: auto !important;
+}
+
+/* Enhanced Focus Indicators */
+.enhanced-focus *:focus {
+  outline: 3px solid #3B82F6 !important;
+  outline-offset: 2px !important;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3) !important;
+}
+
+.enhanced-focus button:focus,
+.enhanced-focus a:focus,
+.enhanced-focus input:focus,
+.enhanced-focus select:focus,
+.enhanced-focus textarea:focus {
+  outline: 3px solid #3B82F6 !important;
+  outline-offset: 2px !important;
+  box-shadow: 0 0 0 5px rgba(59, 130, 246, 0.4) !important;
+}
+
+/* Color Blind Support */
+.colorblind-support .text-red-400,
+.colorblind-support .text-red-500,
+.colorblind-support .bg-red-500 {
+  background-color: #DC2626 !important;
+  color: #FFFFFF !important;
+  border: 2px solid #FFFFFF !important;
+}
+
+.colorblind-support .text-green-400,
+.colorblind-support .text-green-500,
+.colorblind-support .bg-green-500 {
+  background-color: #059669 !important;
+  color: #FFFFFF !important;
+  border: 2px solid #FFFFFF !important;
+}
+
+.colorblind-support .text-yellow-400,
+.colorblind-support .text-yellow-500,
+.colorblind-support .bg-yellow-500 {
+  background-color: #D97706 !important;
+  color: #000000 !important;
+  border: 2px solid #000000 !important;
+}
+
+/* Skip Links */
+.skip-links a {
+  position: absolute;
+  top: -40px;
+  left: 6px;
+  background: #3B82F6;
+  color: white;
+  padding: 8px;
+  text-decoration: none;
+  border-radius: 4px;
+  z-index: 1000;
+}
+
+.skip-links a:focus {
+  top: 6px;
+}
+
+/* Keyboard Navigation Indicators */
+.keyboard-nav *:focus-visible {
+  outline: 3px solid #3B82F6;
+  outline-offset: 2px;
+}
+
+/* Medical Data Accessibility */
+.medical-data-table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.medical-data-table th,
+.medical-data-table td {
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  padding: 12px;
+  text-align: left;
+}
+
+.medical-data-table th {
+  background-color: rgba(59, 130, 246, 0.2);
+  font-weight: bold;
+}
+
+/* HIPAA Compliance Visual Indicators */
+.phi-indicator {
+  position: relative;
+}
+
+.phi-indicator::before {
+  content: "🔒";
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  font-size: 12px;
+  background: #DC2626;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 3D Model Accessibility */
+.model-viewer-accessible {
+  position: relative;
+}
+
+.model-viewer-accessible::after {
+  content: "Use arrow keys to rotate, +/- to zoom, Space to pause rotation";
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.model-viewer-accessible:focus-within::after {
+  opacity: 1;
+}
