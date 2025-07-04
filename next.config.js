@@ -4,7 +4,7 @@ const isProd = process.env.NODE_ENV === 'production';
 const nextConfig = {
   // Performance optimizations
   experimental: {
-    optimizeCss: true,
+    optimizeCss: false, // Disabled to avoid critters dependency issues
     optimizePackageImports: ['lucide-react', '@radix-ui/react-icons'],
   },
 
