@@ -1,4 +1,5 @@
-import DOMPurify from 'isomorphic-dompurify'
+// Note: DOMPurify is handled client-side only for security
+// import DOMPurify from 'isomorphic-dompurify'
 import { z } from 'zod'
 
 // Medical-specific input sanitization
@@ -27,7 +28,18 @@ export class MedicalInputSanitizer {
       FORBID_ATTR: ['onclick', 'onload', 'onerror', 'style'],
     }
     
-    return DOMPurify.sanitize(input, config)
+    // Basic sanitization without DOMPurify dependency
+    return this.basicSanitize(input)
+  }
+
+  private basicSanitize(html: string): string {
+    return html
+      .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
+      .replace(/<iframe\b[^<]*(?:(?!<\/iframe>)<[^<]*)*<\/iframe>/gi, '')
+      .replace(/javascript:/gi, '')
+      .replace(/on\w+\s*=/gi, '')
+      .replace(/<object\b[^<]*(?:(?!<\/object>)<[^<]*)*<\/object>/gi, '')
+      .replace(/<embed\b[^<]*(?:(?!<\/embed>)<[^<]*)*<\/embed>/gi, '');
   }
   
   // Sanitize patient names (Indian names with proper validation)

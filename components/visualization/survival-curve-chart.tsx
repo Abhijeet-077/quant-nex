@@ -73,15 +73,15 @@ export function SurvivalCurveChart() {
         enableSlices="x"
         sliceTooltip={({ slice }) => (
           <div className="bg-black/90 text-white p-3 rounded-lg text-sm border border-blue-500/30">
-            <div className="font-bold mb-2">Time: {slice.points[0].data.x} months</div>
+            <div className="font-bold mb-2">Time: {slice.points[0]?.data?.x || 0} months</div>
             {slice.points.map((point) => (
               <div key={point.id} className="flex items-center mb-1">
                 <div className="w-3 h-3 mr-2 rounded-full" style={{ backgroundColor: point.serieColor }} />
                 <div>
-                  <span>{point.serieId}: {point.data.y.toFixed(1)}%</span>
-                  {point.data.yLow !== undefined && (
+                  <span>{point.serieId}: {typeof point.data.y === 'number' ? point.data.y.toFixed(1) : point.data.y}%</span>
+                  {(point.data as any).yLow !== undefined && (
                     <div className="text-xs opacity-80">
-                      CI: {point.data.yLow.toFixed(1)}% - {point.data.yHigh.toFixed(1)}%
+                      CI: {(point.data as any).yLow.toFixed(1)}% - {(point.data as any).yHigh.toFixed(1)}%
                     </div>
                   )}
                 </div>

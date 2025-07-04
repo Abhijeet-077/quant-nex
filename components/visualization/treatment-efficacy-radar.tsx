@@ -63,14 +63,21 @@ export function TreatmentEfficacyRadar() {
         motionConfig="gentle"
         gridShape="circular"
         gridLevels={5}
-        sliceTooltip={({ data, key, color, value }) => (
+        sliceTooltip={({ data }) => (
           <div className="bg-black/90 text-white p-3 rounded-lg text-sm border border-blue-500/30">
-            <div className="font-bold mb-2">{data.treatment}</div>
-            <div className="flex items-center">
-              <div className="w-3 h-3 mr-2 rounded-full" style={{ backgroundColor: color }} />
-              <div>
-                <span>{metricLabels[key as keyof typeof metricLabels] || key}: {value}</span>
-              </div>
+            <div className="font-bold mb-2">{(data as any).treatment}</div>
+            <div className="space-y-1">
+              {Object.entries(data).map(([key, value]) => {
+                if (key === 'treatment') return null;
+                return (
+                  <div key={key} className="flex items-center">
+                    <div className="w-3 h-3 mr-2 rounded-full bg-blue-500" />
+                    <div>
+                      <span>{metricLabels[key as keyof typeof metricLabels] || key}: {value}</span>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           </div>
         )}
@@ -97,9 +104,11 @@ export function TreatmentEfficacyRadar() {
         ]}
         theme={{
           background: "transparent",
-          textColor: "#ffffff",
-          fontSize: 14,
-          fontWeight: 600,
+          text: {
+            fill: "#ffffff",
+            fontSize: 14,
+            fontWeight: 600,
+          },
           grid: {
             line: {
               stroke: "#3b82f6",
