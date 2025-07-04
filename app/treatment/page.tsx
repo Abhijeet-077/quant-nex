@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { Activity, AlertTriangle, Download, Loader2, Share2, Sliders, Syringe, Zap, Target, Calendar, Clock, User } from "lucide-react"
+import { Activity, AlertTriangle, Download, Loader2, Share2, Sliders, Syringe, Zap, Target, Calendar, Clock, User, Brain } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Slider } from "@/components/ui/slider"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -9,6 +9,7 @@ import { MainLayout } from "@/components/layout/main-layout"
 import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Enhanced3DModel, TreatmentEfficacyRadar } from "@/components/dynamic-imports"
 
 export default function TreatmentPage() {
   const [isOptimizing, setIsOptimizing] = useState(false)
@@ -96,8 +97,9 @@ export default function TreatmentPage() {
         </Card>
 
         <Tabs defaultValue="planning" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-4 bg-gray-900">
+          <TabsList className="grid w-full grid-cols-5 bg-gray-900">
             <TabsTrigger value="planning" className="text-white">Treatment Planning</TabsTrigger>
+            <TabsTrigger value="3d-view" className="text-white">3D View</TabsTrigger>
             <TabsTrigger value="optimization" className="text-white">Optimization</TabsTrigger>
             <TabsTrigger value="progress" className="text-white">Progress Tracking</TabsTrigger>
             <TabsTrigger value="analysis" className="text-white">Analysis</TabsTrigger>
@@ -213,6 +215,148 @@ export default function TreatmentPage() {
                 </CardContent>
               </Card>
             </div>
+          </TabsContent>
+
+          <TabsContent value="3d-view" className="space-y-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {/* 3D Brain Model */}
+              <Card className="card-glow">
+                <CardHeader>
+                  <CardTitle className="text-white flex items-center">
+                    <Brain className="h-5 w-5 mr-2 text-blue-400" />
+                    3D Brain Tumor Visualization
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="h-[500px] rounded-lg overflow-hidden border border-blue-500/20">
+                    <Enhanced3DModel
+                      modelType="brain"
+                      title="Brain Tumor Treatment Planning"
+                      showControls={true}
+                      autoRotate={false}
+                      className="w-full h-full"
+                    />
+                  </div>
+                  <div className="mt-4 space-y-2">
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="text-gray-400">Tumor Volume:</span>
+                      <span className="text-white font-medium">2.3 cm³</span>
+                    </div>
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="text-gray-400">Target Margin:</span>
+                      <span className="text-white font-medium">0.5 cm</span>
+                    </div>
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="text-gray-400">Critical Structures:</span>
+                      <span className="text-yellow-400 font-medium">3 identified</span>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Treatment Efficacy Radar */}
+              <Card className="card-glow">
+                <CardHeader>
+                  <CardTitle className="text-white flex items-center">
+                    <Activity className="h-5 w-5 mr-2 text-green-400" />
+                    Treatment Efficacy Analysis
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <TreatmentEfficacyRadar />
+                  <div className="mt-4 grid grid-cols-2 gap-4">
+                    <div className="text-center p-3 bg-green-900/20 rounded-lg border border-green-500/30">
+                      <p className="text-lg font-bold text-green-400">92%</p>
+                      <p className="text-gray-400 text-sm">Predicted Success Rate</p>
+                    </div>
+                    <div className="text-center p-3 bg-blue-900/20 rounded-lg border border-blue-500/30">
+                      <p className="text-lg font-bold text-blue-400">15%</p>
+                      <p className="text-gray-400 text-sm">Side Effect Risk</p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Radiation Planning */}
+            <Card className="card-glow">
+              <CardHeader>
+                <CardTitle className="text-white flex items-center">
+                  <Zap className="h-5 w-5 mr-2 text-yellow-400" />
+                  Radiation Beam Planning
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  <div className="space-y-4">
+                    <div>
+                      <label className="text-sm text-gray-400 mb-2 block">Beam Angles</label>
+                      <div className="space-y-2">
+                        {[0, 45, 90, 135, 180].map((angle) => (
+                          <div key={angle} className="flex items-center justify-between p-2 bg-gray-900 rounded">
+                            <span className="text-white">{angle}°</span>
+                            <Badge variant="secondary" className="text-xs">Active</Badge>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="space-y-4">
+                    <div>
+                      <label className="text-sm text-gray-400 mb-2 block">Dose Distribution</label>
+                      <div className="space-y-3">
+                        <div className="flex justify-between items-center">
+                          <span className="text-sm text-gray-300">Target (95%)</span>
+                          <span className="text-sm text-green-400 font-mono">60.0 Gy</span>
+                        </div>
+                        <div className="flex justify-between items-center">
+                          <span className="text-sm text-gray-300">Brainstem (Max)</span>
+                          <span className="text-sm text-yellow-400 font-mono">54.0 Gy</span>
+                        </div>
+                        <div className="flex justify-between items-center">
+                          <span className="text-sm text-gray-300">Optic Chiasm</span>
+                          <span className="text-sm text-green-400 font-mono">45.2 Gy</span>
+                        </div>
+                        <div className="flex justify-between items-center">
+                          <span className="text-sm text-gray-300">Healthy Brain</span>
+                          <span className="text-sm text-green-400 font-mono">20.1 Gy</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="space-y-4">
+                    <div>
+                      <label className="text-sm text-gray-400 mb-2 block">Plan Quality Metrics</label>
+                      <div className="space-y-3">
+                        <div className="space-y-1">
+                          <div className="flex justify-between text-sm">
+                            <span className="text-gray-300">Conformity Index</span>
+                            <span className="text-green-400">0.95</span>
+                          </div>
+                          <Progress value={95} className="h-2" />
+                        </div>
+                        <div className="space-y-1">
+                          <div className="flex justify-between text-sm">
+                            <span className="text-gray-300">Homogeneity Index</span>
+                            <span className="text-green-400">0.92</span>
+                          </div>
+                          <Progress value={92} className="h-2" />
+                        </div>
+                        <div className="space-y-1">
+                          <div className="flex justify-between text-sm">
+                            <span className="text-gray-300">Gradient Index</span>
+                            <span className="text-blue-400">3.2</span>
+                          </div>
+                          <Progress value={80} className="h-2" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
           </TabsContent>
 
           <TabsContent value="optimization" className="space-y-6">

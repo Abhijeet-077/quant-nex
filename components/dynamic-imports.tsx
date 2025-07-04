@@ -1,7 +1,7 @@
 "use client"
 
 import dynamic from "next/dynamic"
-import { ComponentType } from "react"
+import { ComponentType, useState, useEffect, createElement } from "react"
 
 // Loading components for better UX
 const LoadingSpinner = () => (
@@ -36,16 +36,49 @@ const LoadingChart = () => (
 )
 
 // 3D Model Components (Heavy - Dynamic Import)
-export const LayeredAnatomyModel = dynamic(
-  () => import("@/components/3d/layered-anatomy-model").then(mod => mod.LayeredAnatomyModel),
+export const Enhanced3DModel = dynamic(
+  () => import("@/components/3d/enhanced-3d-model").then(mod => mod.Enhanced3DModel),
   {
     loading: Loading3DModel,
-    ssr: false, // 3D models should not be server-side rendered
+    ssr: false,
+  }
+)
+
+export const InteractiveMedicalModels = dynamic(
+  () => import("@/components/3d/interactive-medical-models").then(mod => mod.InteractiveMedicalModels),
+  {
+    loading: Loading3DModel,
+    ssr: false,
+  }
+)
+
+export const Immersive4DSpace = dynamic(
+  () => import("@/components/3d/immersive-4d-space").then(mod => mod.Immersive4DSpace),
+  {
+    loading: Loading3DModel,
+    ssr: false,
+  }
+)
+
+export const BrainModel3D = dynamic(
+  () => import("@/components/3d/brain-model-3d").then(mod => mod.BrainModel3D),
+  {
+    loading: Loading3DModel,
+    ssr: false,
+  }
+)
+
+// Visualization Components (Heavy - Dynamic Import)
+export const LayeredAnatomyModel = dynamic(
+  () => import("@/components/visualization/layered-anatomy-model").then(mod => mod.LayeredAnatomyModel),
+  {
+    loading: Loading3DModel,
+    ssr: false,
   }
 )
 
 export const DetailedBrainTumor = dynamic(
-  () => import("@/components/3d/detailed-brain-tumor").then(mod => mod.DetailedBrainTumor),
+  () => import("@/components/visualization/detailed-brain-tumor").then(mod => mod.DetailedBrainTumor),
   {
     loading: Loading3DModel,
     ssr: false,
@@ -53,7 +86,15 @@ export const DetailedBrainTumor = dynamic(
 )
 
 export const DamagedOrgansModel = dynamic(
-  () => import("@/components/3d/damaged-organs-model").then(mod => mod.DamagedOrgansModel),
+  () => import("@/components/visualization/damaged-organs-model").then(mod => mod.DamagedOrgansModel),
+  {
+    loading: Loading3DModel,
+    ssr: false,
+  }
+)
+
+export const TumorVisualization3D = dynamic(
+  () => import("@/components/visualization/tumor-model-3d").then(mod => mod.TumorVisualization3D),
   {
     loading: Loading3DModel,
     ssr: false,
@@ -61,155 +102,26 @@ export const DamagedOrgansModel = dynamic(
 )
 
 // Chart Components (Heavy - Dynamic Import)
-export const AnalyticsCharts = dynamic(
-  () => import("@/components/analytics/analytics-charts").then(mod => mod.AnalyticsCharts),
+
+export const SurvivalCurveChart = dynamic(
+  () => import("@/components/visualization/survival-curve-chart").then(mod => mod.SurvivalCurveChart),
   {
     loading: LoadingChart,
-    ssr: true, // Charts can be server-side rendered
+    ssr: false,
   }
 )
 
-export const TreatmentProgressChart = dynamic(
-  () => import("@/components/charts/treatment-progress-chart").then(mod => mod.TreatmentProgressChart),
+export const TreatmentEfficacyRadar = dynamic(
+  () => import("@/components/visualization/treatment-efficacy-radar").then(mod => mod.TreatmentEfficacyRadar),
   {
     loading: LoadingChart,
-    ssr: true,
+    ssr: false,
   }
 )
 
-export const PatientDemographicsChart = dynamic(
-  () => import("@/components/charts/patient-demographics-chart").then(mod => mod.PatientDemographicsChart),
-  {
-    loading: LoadingChart,
-    ssr: true,
-  }
-)
 
-// Form Components (Medium Weight - Dynamic Import)
-export const PatientRegistrationForm = dynamic(
-  () => import("@/components/forms/patient-registration-form").then(mod => mod.PatientRegistrationForm),
-  {
-    loading: () => <LoadingSkeleton className="h-96" />,
-    ssr: true,
-  }
-)
 
-export const TreatmentPlanForm = dynamic(
-  () => import("@/components/forms/treatment-plan-form").then(mod => mod.TreatmentPlanForm),
-  {
-    loading: () => <LoadingSkeleton className="h-80" />,
-    ssr: true,
-  }
-)
 
-export const MedicalReportEditor = dynamic(
-  () => import("@/components/forms/medical-report-editor").then(mod => mod.MedicalReportEditor),
-  {
-    loading: () => <LoadingSkeleton className="h-64" />,
-    ssr: false, // Rich text editor should not be SSR
-  }
-)
-
-// Video/Telemedicine Components (Heavy - Dynamic Import)
-export const VideoConsultationRoom = dynamic(
-  () => import("@/components/telemedicine/video-consultation-room").then(mod => mod.VideoConsultationRoom),
-  {
-    loading: () => (
-      <div className="flex items-center justify-center p-8 bg-black rounded-lg">
-        <div className="text-center">
-          <div className="w-12 h-12 border-2 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-          <p className="text-gray-300">Initializing Video Call...</p>
-        </div>
-      </div>
-    ),
-    ssr: false, // Video components should not be SSR
-  }
-)
-
-// File Upload Components (Medium Weight - Dynamic Import)
-export const MedicalFileUploader = dynamic(
-  () => import("@/components/upload/medical-file-uploader").then(mod => mod.MedicalFileUploader),
-  {
-    loading: () => <LoadingSkeleton className="h-48" />,
-    ssr: true,
-  }
-)
-
-export const DicomViewer = dynamic(
-  () => import("@/components/medical/dicom-viewer").then(mod => mod.DicomViewer),
-  {
-    loading: () => (
-      <div className="flex items-center justify-center p-8 bg-gray-900 rounded-lg">
-        <div className="text-center">
-          <div className="w-12 h-12 border-2 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-          <p className="text-gray-300">Loading DICOM Viewer...</p>
-        </div>
-      </div>
-    ),
-    ssr: false, // DICOM viewer should not be SSR
-  }
-)
-
-// Calendar/Scheduling Components (Medium Weight - Dynamic Import)
-export const AdvancedScheduler = dynamic(
-  () => import("@/components/schedule/advanced-scheduler").then(mod => mod.AdvancedScheduler),
-  {
-    loading: () => <LoadingSkeleton className="h-96" />,
-    ssr: true,
-  }
-)
-
-// Data Visualization Components (Heavy - Dynamic Import)
-export const MedicalDataVisualizer = dynamic(
-  () => import("@/components/visualization/medical-data-visualizer").then(mod => mod.MedicalDataVisualizer),
-  {
-    loading: LoadingChart,
-    ssr: true,
-  }
-)
-
-// AI/ML Components (Heavy - Dynamic Import)
-export const AIInsightsDashboard = dynamic(
-  () => import("@/components/ai/ai-insights-dashboard").then(mod => mod.AIInsightsDashboard),
-  {
-    loading: () => (
-      <div className="flex items-center justify-center p-8 bg-gradient-to-r from-purple-900/20 to-blue-900/20 rounded-lg">
-        <div className="text-center">
-          <div className="w-12 h-12 border-2 border-purple-500 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-          <p className="text-gray-300">Loading AI Insights...</p>
-        </div>
-      </div>
-    ),
-    ssr: false, // AI components should not be SSR
-  }
-)
-
-// Utility function to preload components
-export function preloadComponent(componentName: keyof typeof componentMap) {
-  const component = componentMap[componentName]
-  if (component && typeof component.preload === 'function') {
-    component.preload()
-  }
-}
-
-// Component map for programmatic access
-const componentMap = {
-  LayeredAnatomyModel,
-  DetailedBrainTumor,
-  DamagedOrgansModel,
-  AnalyticsCharts,
-  TreatmentProgressChart,
-  PatientDemographicsChart,
-  PatientRegistrationForm,
-  TreatmentPlanForm,
-  MedicalReportEditor,
-  VideoConsultationRoom,
-  MedicalFileUploader,
-  DicomViewer,
-  AdvancedScheduler,
-  MedicalDataVisualizer,
-  AIInsightsDashboard,
-}
 
 // Hook for conditional component loading
 export function useConditionalImport<T extends ComponentType<any>>(

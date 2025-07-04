@@ -1,67 +1,162 @@
 "use client"
 
 import { useMemo } from "react"
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts"
+import { ResponsiveLine } from "@nivo/line"
 
 export function SurvivalCurveChart() {
   const data = useMemo(() => {
-    return Array.from({ length: 61 }, (_, i) => ({
-      time: i,
-      baseline: Math.max(0, 100 * Math.exp(-0.02 * i)),
-      patient: Math.max(0, 100 * Math.exp(-0.015 * i) * (1 - 0.2 * Math.sin(i / 10))),
-      treatment: Math.max(0, 100 * Math.exp(-0.008 * i) * (1 - 0.1 * Math.sin(i / 15))),
-    }))
+    // Generate realistic survival curve data
+    const baselineData = {
+      id: "Population Baseline",
+      color: "#8884d8",
+      data: Array.from({ length: 61 }, (_, i) => ({
+        x: i,
+        y: Math.max(0, 100 * Math.exp(-0.02 * i)),
+      })),
+    }
+
+    const patientData = {
+      id: "Patient Prediction",
+      color: "#82ca9d",
+      data: Array.from({ length: 61 }, (_, i) => ({
+        x: i,
+        y: Math.max(0, 100 * Math.exp(-0.015 * i) * (1 - 0.2 * Math.sin(i / 10))),
+        yLow: Math.max(0, 100 * Math.exp(-0.02 * i) * (1 - 0.2 * Math.sin(i / 10) - 0.05)),
+        yHigh: Math.max(0, 100 * Math.exp(-0.01 * i) * (1 - 0.2 * Math.sin(i / 10) + 0.05)),
+      })),
+    }
+
+    const treatmentData = {
+      id: "With Treatment",
+      color: "#ffc658",
+      data: Array.from({ length: 61 }, (_, i) => ({
+        x: i,
+        y: Math.max(0, 100 * Math.exp(-0.008 * i) * (1 - 0.1 * Math.sin(i / 15))),
+      })),
+    }
+
+    return [baselineData, patientData, treatmentData]
   }, [])
 
   return (
     <div className="h-[400px] bg-black/20 rounded-lg p-4 border border-blue-500/20">
-      <ResponsiveContainer width="100%" height="100%">
-        <LineChart data={data} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
-          <CartesianGrid strokeDasharray="3 3" stroke="#ffffff20" />
-          <XAxis
-            dataKey="time"
-            stroke="#ffffff80"
-            label={{ value: 'Time (months)', position: 'insideBottom', offset: -10, fill: '#ffffff80' }}
-          />
-          <YAxis
-            stroke="#ffffff80"
-            label={{ value: 'Survival Probability (%)', angle: -90, position: 'insideLeft', fill: '#ffffff80' }}
-          />
-          <Tooltip
-            contentStyle={{
-              backgroundColor: '#000000cc',
-              border: '1px solid #3b82f6',
-              borderRadius: '8px',
-              color: '#ffffff'
-            }}
-          />
-          <Legend />
-          <Line
-            type="monotone"
-            dataKey="baseline"
-            stroke="#8884d8"
-            strokeWidth={2}
-            dot={{ fill: '#8884d8', strokeWidth: 2, r: 4 }}
-            name="Population Baseline"
-          />
-          <Line
-            type="monotone"
-            dataKey="patient"
-            stroke="#82ca9d"
-            strokeWidth={2}
-            dot={{ fill: '#82ca9d', strokeWidth: 2, r: 4 }}
-            name="Patient Prediction"
-          />
-          <Line
-            type="monotone"
-            dataKey="treatment"
-            stroke="#ffc658"
-            strokeWidth={2}
-            dot={{ fill: '#ffc658', strokeWidth: 2, r: 4 }}
-            name="With Treatment"
-          />
-        </LineChart>
-      </ResponsiveContainer>
+      <ResponsiveLine
+        data={data}
+        margin={{ top: 50, right: 110, bottom: 50, left: 60 }}
+        xScale={{ type: "linear", min: 0, max: "auto" }}
+        yScale={{ type: "linear", min: 0, max: 100 }}
+        axisTop={null}
+        axisRight={null}
+        axisBottom={{
+          tickSize: 5,
+          tickPadding: 5,
+          tickRotation: 0,
+          legend: "Time (months)",
+          legendOffset: 36,
+          legendPosition: "middle",
+        }}
+        axisLeft={{
+          tickSize: 5,
+          tickPadding: 5,
+          tickRotation: 0,
+          legend: "Survival Probability (%)",
+          legendOffset: -40,
+          legendPosition: "middle",
+        }}
+        colors={{ scheme: "category10" }}
+        pointSize={8}
+        pointColor={{ theme: "background" }}
+        pointBorderWidth={2}
+        pointBorderColor={{ from: "serieColor" }}
+        pointLabelYOffset={-12}
+        useMesh={true}
+        enableSlices="x"
+        sliceTooltip={({ slice }) => (
+          <div className="bg-black/90 text-white p-3 rounded-lg text-sm border border-blue-500/30">
+            <div className="font-bold mb-2">Time: {slice.points[0].data.x} months</div>
+            {slice.points.map((point) => (
+              <div key={point.id} className="flex items-center mb-1">
+                <div className="w-3 h-3 mr-2 rounded-full" style={{ backgroundColor: point.serieColor }} />
+                <div>
+                  <span>{point.serieId}: {point.data.y.toFixed(1)}%</span>
+                  {point.data.yLow !== undefined && (
+                    <div className="text-xs opacity-80">
+                      CI: {point.data.yLow.toFixed(1)}% - {point.data.yHigh.toFixed(1)}%
+                    </div>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+        legends={[
+          {
+            anchor: "bottom-right",
+            direction: "column",
+            justify: false,
+            translateX: 100,
+            translateY: 0,
+            itemsSpacing: 0,
+            itemDirection: "left-to-right",
+            itemWidth: 80,
+            itemHeight: 20,
+            itemOpacity: 0.75,
+            symbolSize: 12,
+            symbolShape: "circle",
+            symbolBorderColor: "rgba(0, 0, 0, .5)",
+            effects: [
+              {
+                on: "hover",
+                style: {
+                  itemBackground: "rgba(0, 0, 0, .03)",
+                  itemOpacity: 1,
+                },
+              },
+            ],
+          },
+        ]}
+        theme={{
+          background: "transparent",
+          text: {
+            fill: "#ffffff",
+          },
+          axis: {
+            domain: {
+              line: {
+                stroke: "#ffffff",
+                strokeWidth: 1,
+              },
+            },
+            legend: {
+              text: {
+                fill: "#ffffff",
+              },
+            },
+            ticks: {
+              line: {
+                stroke: "#ffffff",
+                strokeWidth: 1,
+              },
+              text: {
+                fill: "#ffffff",
+              },
+            },
+          },
+          grid: {
+            line: {
+              stroke: "#ffffff",
+              strokeWidth: 0.5,
+              strokeOpacity: 0.3,
+            },
+          },
+          legends: {
+            text: {
+              fill: "#ffffff",
+            },
+          },
+        }}
+        motionConfig="gentle"
+      />
     </div>
   )
 }

@@ -16,7 +16,9 @@ import {
   FileText,
   TrendingUp,
   Activity,
+  Eye,
 } from "lucide-react"
+import { SurvivalCurveChart, Enhanced3DModel } from "@/components/dynamic-imports"
 
 export default function Prognosis() {
   const [activeTab, setActiveTab] = useState("overview")
@@ -85,8 +87,9 @@ export default function Prognosis() {
         </Card>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList className="grid w-full grid-cols-4 bg-gray-900">
+          <TabsList className="grid w-full grid-cols-5 bg-gray-900">
             <TabsTrigger value="overview" className="text-white">Overview</TabsTrigger>
+            <TabsTrigger value="3d-view" className="text-white">3D View</TabsTrigger>
             <TabsTrigger value="survival" className="text-white">Survival Analysis</TabsTrigger>
             <TabsTrigger value="treatment" className="text-white">Treatment Response</TabsTrigger>
             <TabsTrigger value="recommendations" className="text-white">Recommendations</TabsTrigger>
@@ -150,6 +153,124 @@ export default function Prognosis() {
             </div>
           </TabsContent>
 
+          <TabsContent value="3d-view" className="space-y-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {/* 3D Tumor Model */}
+              <Card className="card-glow">
+                <CardHeader>
+                  <CardTitle className="text-white flex items-center">
+                    <Brain className="h-5 w-5 mr-2 text-blue-400" />
+                    3D Tumor Visualization
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="h-[400px] rounded-lg overflow-hidden border border-blue-500/20">
+                    <Enhanced3DModel
+                      modelType="tumor"
+                      title="Tumor Progression Analysis"
+                      showControls={true}
+                      autoRotate={true}
+                      className="w-full h-full"
+                    />
+                  </div>
+                  <div className="mt-4 space-y-2">
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="text-gray-400">Current Volume:</span>
+                      <span className="text-white font-medium">1.8 cm³</span>
+                    </div>
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="text-gray-400">Volume Change:</span>
+                      <span className="text-green-400 font-medium">-15% (3 months)</span>
+                    </div>
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="text-gray-400">Growth Rate:</span>
+                      <span className="text-green-400 font-medium">Stable</span>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Anatomical Analysis */}
+              <Card className="card-glow">
+                <CardHeader>
+                  <CardTitle className="text-white flex items-center">
+                    <Eye className="h-5 w-5 mr-2 text-purple-400" />
+                    Anatomical Analysis
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="h-[400px] rounded-lg overflow-hidden border border-purple-500/20">
+                    <Enhanced3DModel
+                      modelType="brain"
+                      title="Brain Anatomy Analysis"
+                      showControls={true}
+                      autoRotate={false}
+                      className="w-full h-full"
+                    />
+                  </div>
+                  <div className="mt-4 space-y-3">
+                    <div className="p-3 bg-green-900/20 rounded-lg border border-green-500/30">
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm text-gray-300">Motor Cortex</span>
+                        <Badge variant="secondary" className="bg-green-500/20 text-green-400">Safe</Badge>
+                      </div>
+                    </div>
+                    <div className="p-3 bg-yellow-900/20 rounded-lg border border-yellow-500/30">
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm text-gray-300">Speech Area</span>
+                        <Badge variant="secondary" className="bg-yellow-500/20 text-yellow-400">Monitor</Badge>
+                      </div>
+                    </div>
+                    <div className="p-3 bg-green-900/20 rounded-lg border border-green-500/30">
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm text-gray-300">Visual Cortex</span>
+                        <Badge variant="secondary" className="bg-green-500/20 text-green-400">Safe</Badge>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Progression Timeline */}
+            <Card className="card-glow">
+              <CardHeader>
+                <CardTitle className="text-white flex items-center">
+                  <Calendar className="h-5 w-5 mr-2 text-cyan-400" />
+                  Tumor Progression Timeline
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <div className="flex items-center space-x-4 p-4 bg-gray-900 rounded-lg">
+                    <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
+                    <div className="flex-1">
+                      <p className="text-white font-medium">Initial Diagnosis</p>
+                      <p className="text-gray-400 text-sm">January 15, 2024 - Tumor size: 2.3 cm³</p>
+                    </div>
+                    <Badge variant="outline" className="border-blue-500 text-blue-400">Baseline</Badge>
+                  </div>
+                  <div className="flex items-center space-x-4 p-4 bg-gray-900 rounded-lg">
+                    <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                    <div className="flex-1">
+                      <p className="text-white font-medium">3-Month Follow-up</p>
+                      <p className="text-gray-400 text-sm">April 15, 2024 - Tumor size: 2.0 cm³ (-13%)</p>
+                    </div>
+                    <Badge variant="outline" className="border-green-500 text-green-400">Responding</Badge>
+                  </div>
+                  <div className="flex items-center space-x-4 p-4 bg-gray-900 rounded-lg">
+                    <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                    <div className="flex-1">
+                      <p className="text-white font-medium">Current Status</p>
+                      <p className="text-gray-400 text-sm">July 4, 2024 - Tumor size: 1.8 cm³ (-22%)</p>
+                    </div>
+                    <Badge variant="outline" className="border-green-500 text-green-400">Stable</Badge>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
           <TabsContent value="survival" className="space-y-6">
             <Card className="card-glow">
               <CardHeader>
@@ -159,14 +280,19 @@ export default function Prognosis() {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="space-y-4">
-                  <div className="p-4 bg-gray-900 rounded-lg">
-                    <h3 className="text-white font-medium mb-2">5-Year Survival Rate</h3>
-                    <p className="text-gray-300">Based on current treatment response and patient profile, the estimated 5-year survival rate is <span className="text-green-400 font-bold">78%</span>.</p>
+                <SurvivalCurveChart />
+                <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="text-center p-4 bg-gray-900 rounded-lg">
+                    <p className="text-2xl font-bold text-green-400">78%</p>
+                    <p className="text-gray-400 text-sm">5-Year Survival</p>
                   </div>
-                  <div className="p-4 bg-gray-900 rounded-lg">
-                    <h3 className="text-white font-medium mb-2">Treatment Response</h3>
-                    <p className="text-gray-300">Patient shows <span className="text-blue-400 font-bold">excellent response</span> to current treatment protocol with minimal side effects.</p>
+                  <div className="text-center p-4 bg-gray-900 rounded-lg">
+                    <p className="text-2xl font-bold text-blue-400">92%</p>
+                    <p className="text-gray-400 text-sm">2-Year Survival</p>
+                  </div>
+                  <div className="text-center p-4 bg-gray-900 rounded-lg">
+                    <p className="text-2xl font-bold text-purple-400">24</p>
+                    <p className="text-gray-400 text-sm">Median Months</p>
                   </div>
                 </div>
               </CardContent>
