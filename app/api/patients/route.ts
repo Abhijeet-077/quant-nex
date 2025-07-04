@@ -157,7 +157,6 @@ export async function GET(request: NextRequest) {
   return withApiSecurity(request, handleGetPatients, {
     requireAuth: true,
     requiredPermissions: ['patient_read'],
-    rateLimit: 'patients',
   })
 }
 
@@ -167,6 +166,5 @@ export async function POST(request: NextRequest) {
     requireAuth: true,
     requiredPermissions: ['patient_write'],
     validateSchema: PatientDataSchema,
-    rateLimit: 'patients',
   })
 }

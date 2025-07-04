@@ -159,7 +159,6 @@ export async function GET(request: NextRequest) {
   return withApiSecurity(request, handleGetAppointments, {
     requireAuth: true,
     requiredPermissions: ['appointment_read'],
-    rateLimit: 'appointments',
   })
 }
 
@@ -169,6 +168,5 @@ export async function POST(request: NextRequest) {
     requireAuth: true,
     requiredPermissions: ['appointment_write'],
     validateSchema: AppointmentDataSchema,
-    rateLimit: 'appointments',
   })
 }

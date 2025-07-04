@@ -1,47 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
 import { getToken } from "next-auth/jwt"
 import { z } from "zod"
-import rateLimit from "express-rate-limit"
-import slowDown from "express-slow-down"
-
-// Rate limiting configuration for medical APIs
-const createRateLimiter = (windowMs: number, max: number) => {
-  return rateLimit({
-    windowMs,
-    max,
-    message: {
-      error: "Too many requests",
-      message: "Rate limit exceeded. Please try again later.",
-      retryAfter: Math.ceil(windowMs / 1000),
-    },
-    standardHeaders: true,
-    legacyHeaders: false,
-  })
-}
-
-// Different rate limits for different endpoints
-export const rateLimiters = {
-  // Authentication endpoints - stricter limits
-  auth: createRateLimiter(15 * 60 * 1000, 5), // 5 attempts per 15 minutes
-  
-  // Patient data endpoints - moderate limits
-  patients: createRateLimiter(60 * 1000, 100), // 100 requests per minute
-  
-  // General API endpoints
-  general: createRateLimiter(60 * 1000, 200), // 200 requests per minute
-  
-  // File upload endpoints - very strict
-  upload: createRateLimiter(60 * 1000, 10), // 10 uploads per minute
-}
-
-// Slow down middleware for suspicious activity
-export const speedLimiter = slowDown({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  delayAfter: 50, // Allow 50 requests per windowMs without delay
-  delayMs: () => 500, // Add 500ms delay per request after delayAfter
-  maxDelayMs: 20000, // Maximum delay of 20 seconds
-  validate: { delayMs: false }, // Disable the warning
-})
 
 // Input validation schemas for medical data
 export const PatientDataSchema = z.object({
@@ -116,7 +75,6 @@ export async function withApiSecurity(
     requireAuth?: boolean
     requiredPermissions?: string[]
     validateSchema?: z.ZodSchema
-    rateLimit?: keyof typeof rateLimiters
   } = {}
 ) {
   try {
@@ -137,13 +95,7 @@ export async function withApiSecurity(
       return new NextResponse(null, { status: 200, headers: corsHeaders })
     }
 
-    // Rate limiting
-    if (options.rateLimit) {
-      // In production, implement proper rate limiting with Redis
-      // For now, we'll add headers to indicate rate limiting is active
-      corsHeaders["X-RateLimit-Limit"] = "100"
-      corsHeaders["X-RateLimit-Remaining"] = "99"
-    }
+    // Rate limiting removed for deployment simplicity
 
     // Authentication check
     let user = null

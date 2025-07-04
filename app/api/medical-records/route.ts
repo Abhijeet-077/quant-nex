@@ -160,7 +160,6 @@ export async function GET(request: NextRequest) {
   return withApiSecurity(request, handleGetMedicalRecords, {
     requireAuth: true,
     requiredPermissions: ['medical_record_read'],
-    rateLimit: 'medical_records',
   })
 }
 
@@ -170,6 +169,5 @@ export async function POST(request: NextRequest) {
     requireAuth: true,
     requiredPermissions: ['medical_record_write'],
     validateSchema: MedicalRecordDataSchema,
-    rateLimit: 'medical_records',
   })
 }

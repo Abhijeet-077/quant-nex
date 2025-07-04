@@ -56,11 +56,11 @@ const nextConfig = {
           { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=(), interest-cohort=()' },
           { key: 'Content-Security-Policy', value: [
             "default-src 'self'",
-            "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://js.sentry-cdn.com https://vercel.live",
+            "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://vercel.live",
             "style-src 'self' 'unsafe-inline'",
             "img-src 'self' data: blob: https: https://*.supabase.co",
             "font-src 'self' data:",
-            "connect-src 'self' https: https://*.supabase.co https://*.sentry.io https://vercel.live wss://*.supabase.co",
+            "connect-src 'self' https: https://*.supabase.co https://vercel.live wss://*.supabase.co",
             "media-src 'self'",
             "object-src 'none'",
             "base-uri 'self'",

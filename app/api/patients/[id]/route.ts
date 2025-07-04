@@ -255,7 +255,6 @@ export async function GET(
   return withApiSecurity(request, (req, context) => handleGetPatient(req, { ...context, params: resolvedParams }), {
     requireAuth: true,
     requiredPermissions: ['patient_read'],
-    rateLimit: 'patients',
   })
 }
 
@@ -268,6 +267,5 @@ export async function PUT(
   return withApiSecurity(request, (req, context) => handleUpdatePatient(req, { ...context, params: resolvedParams }), {
     requireAuth: true,
     requiredPermissions: ['patient_write'],
-    rateLimit: 'patients',
   })
 }
