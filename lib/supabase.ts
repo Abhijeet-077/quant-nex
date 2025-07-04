@@ -1,5 +1,5 @@
 import { createClient } from '@supabase/supabase-js'
-import { createClientComponentClient, createServerComponentClient } from '@supabase/auth-helpers-nextjs'
+import { createBrowserClient, createServerClient } from '@supabase/ssr'
 import { cookies } from 'next/headers'
 
 // Supabase configuration
@@ -27,12 +27,19 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
 
 // Client component Supabase client (for use in client components)
 export const createSupabaseClient = () => {
-  return createClientComponentClient()
+  return createBrowserClient(supabaseUrl, supabaseAnonKey)
 }
 
 // Server component Supabase client (for use in server components)
 export const createSupabaseServerClient = () => {
-  return createServerComponentClient({ cookies })
+  const cookieStore = cookies()
+  return createServerClient(supabaseUrl, supabaseAnonKey, {
+    cookies: {
+      get(name: string) {
+        return cookieStore.get(name)?.value
+      },
+    },
+  })
 }
 
 // Admin client with service role key (for server-side operations)
