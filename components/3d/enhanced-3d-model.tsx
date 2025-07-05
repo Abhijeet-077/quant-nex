@@ -5,7 +5,7 @@ import { useFrame } from "@react-three/fiber"
 import { Text, Sphere, Box, Cylinder } from "@react-three/drei"
 import * as THREE from "three"
 import { Button } from "@/components/ui/button"
-import { Reliable3DWrapper } from "./reliable-3d-wrapper"
+import { VercelOptimized3D } from "./vercel-optimized-3d"
 import { RotateCcw, ZoomIn, ZoomOut, Move3D } from "lucide-react"
 
 interface Enhanced3DModelProps {
@@ -219,41 +219,15 @@ export function Enhanced3DModel({
   autoRotate = true,
   className = ""
 }: Enhanced3DModelProps) {
-  const renderModel = () => {
-    switch (modelType) {
-      case "brain":
-        return <BrainModel />
-      case "heart":
-        return <HeartModel />
-      case "tumor":
-        return <TumorModel />
-      default:
-        return <OrganModel modelType={modelType} />
-    }
-  }
-
   return (
     <div className={`relative w-full h-full bg-black/20 rounded-lg overflow-hidden ${className}`}>
-      <Reliable3DWrapper
+      <VercelOptimized3D
         modelType={modelType}
         title={title}
         showControls={showControls}
         autoRotate={autoRotate}
         className="w-full h-full"
-      >
-        {renderModel()}
-
-        {/* Title */}
-        <Text
-          position={[0, 3, 0]}
-          fontSize={0.5}
-          color="#ffffff"
-          anchorX="center"
-          anchorY="middle"
-        >
-          {title}
-        </Text>
-      </Reliable3DWrapper>
+      />
     </div>
   )
 }

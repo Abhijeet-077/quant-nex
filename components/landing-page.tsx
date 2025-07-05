@@ -65,17 +65,13 @@ const InteractiveModelShowcase = dynamic(() => import("@/components/landing/inte
   ssr: false
 })
 
-const EnhancedParticleBackground = dynamic(() => import("@/components/ui-effects/enhanced-particle-background").then(mod => ({ default: mod.EnhancedParticleBackground })), {
+// Optimized medical background components - performance focused
+const OptimizedMedicalBackground = dynamic(() => import("@/components/ui-effects/optimized-medical-background").then(mod => ({ default: mod.OptimizedMedicalBackground })), {
   loading: () => <div className="absolute inset-0 bg-black" />,
   ssr: false
 })
 
-const FloatingMedicalIcons = dynamic(() => import("@/components/ui-effects/enhanced-particle-background").then(mod => ({ default: mod.FloatingMedicalIcons })), {
-  loading: () => null,
-  ssr: false
-})
-
-const MedicalDataVisualization = dynamic(() => import("@/components/ui-effects/enhanced-particle-background").then(mod => ({ default: mod.MedicalDataVisualization })), {
+const MedicalPatternOverlay = dynamic(() => import("@/components/ui-effects/optimized-medical-background").then(mod => ({ default: mod.MedicalPatternOverlay })), {
   loading: () => null,
   ssr: false
 })
@@ -226,33 +222,13 @@ export function LandingPage() {
       }
     >
       <div className="min-h-screen bg-black text-white overflow-hidden relative">
-        {/* Enhanced Background Effects */}
+        {/* Optimized Medical Background */}
         <ErrorBoundary fallback={<div className="absolute inset-0 bg-black" />}>
-          <EnhancedParticleBackground
-            particleCount={60}
-            colors={["#3b82f6", "#8b5cf6", "#06b6d4", "#10b981", "#f59e0b"]}
-          />
-          <FloatingMedicalIcons />
-          <MedicalDataVisualization />
+          <OptimizedMedicalBackground />
+          <MedicalPatternOverlay />
         </ErrorBoundary>
 
-      {/* Cursor Glow Effect */}
-      <motion.div
-        className="fixed w-96 h-96 pointer-events-none z-50 mix-blend-screen"
-        style={{
-          background: "radial-gradient(circle, rgba(59,130,246,0.15) 0%, transparent 70%)",
-          left: mousePosition.x - 192,
-          top: mousePosition.y - 192,
-        }}
-        animate={{
-          scale: [1, 1.2, 1],
-        }}
-        transition={{
-          duration: 2,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
-      />
+
 
       {/* Hero Section */}
       <motion.section
@@ -260,54 +236,8 @@ export function LandingPage() {
         className="relative min-h-screen flex items-center justify-center"
         style={{ opacity: heroOpacity, scale: heroScale }}
       >
-        {/* Dynamic Background Layers */}
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-900/20 via-black to-purple-900/20" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_40%,rgba(59,130,246,0.15),transparent_50%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_60%,rgba(147,51,234,0.1),transparent_50%)]" />
-
-        {/* Animated Grid Pattern */}
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute inset-0" style={{
-            backgroundImage: `
-              linear-gradient(rgba(59,130,246,0.3) 1px, transparent 1px),
-              linear-gradient(90deg, rgba(59,130,246,0.3) 1px, transparent 1px)
-            `,
-            backgroundSize: '50px 50px',
-          }} />
-        </div>
-
-        {/* Enhanced Floating Particles */}
-        <div className="absolute inset-0">
-          {[...Array(30)].map((_, i) => (
-            <motion.div
-              key={i}
-              className="absolute rounded-full"
-              style={{
-                width: Math.random() * 4 + 1,
-                height: Math.random() * 4 + 1,
-                background: i % 3 === 0 ? '#3b82f6' : i % 3 === 1 ? '#8b5cf6' : '#06b6d4',
-              }}
-              initial={{
-                opacity: 0,
-                scale: 0,
-                x: Math.random() * (typeof window !== 'undefined' ? window.innerWidth : 1000),
-                y: Math.random() * (typeof window !== 'undefined' ? window.innerHeight : 1000),
-              }}
-              animate={{
-                opacity: [0, 0.8, 0],
-                scale: [0, 1, 0],
-                x: Math.random() * (typeof window !== 'undefined' ? window.innerWidth : 1000),
-                y: Math.random() * (typeof window !== 'undefined' ? window.innerHeight : 1000),
-              }}
-              transition={{
-                duration: Math.random() * 4 + 3,
-                repeat: Infinity,
-                delay: Math.random() * 3,
-                ease: "easeInOut",
-              }}
-            />
-          ))}
-        </div>
+        {/* Simplified Background Layer */}
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-900/10 via-black to-purple-900/10" />
 
         <div className="container mx-auto px-4 z-10 relative">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center min-h-screen">
