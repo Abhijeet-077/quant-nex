@@ -10,6 +10,7 @@ import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Enhanced3DModel, TreatmentEfficacyRadar } from "@/components/dynamic-imports"
+import { Medical3DErrorBoundary } from "@/components/3d/3d-error-boundary"
 
 export default function TreatmentPage() {
   const [isOptimizing, setIsOptimizing] = useState(false)
@@ -229,13 +230,19 @@ export default function TreatmentPage() {
                 </CardHeader>
                 <CardContent>
                   <div className="h-[500px] rounded-lg overflow-hidden border border-blue-500/20">
-                    <Enhanced3DModel
+                    <Medical3DErrorBoundary
                       modelType="brain"
                       title="Brain Tumor Treatment Planning"
-                      showControls={true}
-                      autoRotate={false}
                       className="w-full h-full"
-                    />
+                    >
+                      <Enhanced3DModel
+                        modelType="brain"
+                        title="Brain Tumor Treatment Planning"
+                        showControls={true}
+                        autoRotate={false}
+                        className="w-full h-full"
+                      />
+                    </Medical3DErrorBoundary>
                   </div>
                   <div className="mt-4 space-y-2">
                     <div className="flex items-center justify-between text-sm">

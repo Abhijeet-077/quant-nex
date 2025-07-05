@@ -19,6 +19,7 @@ import {
   Eye,
 } from "lucide-react"
 import { SurvivalCurveChart, Enhanced3DModel } from "@/components/dynamic-imports"
+import { Medical3DErrorBoundary } from "@/components/3d/3d-error-boundary"
 
 export default function Prognosis() {
   const [activeTab, setActiveTab] = useState("overview")
@@ -165,13 +166,19 @@ export default function Prognosis() {
                 </CardHeader>
                 <CardContent>
                   <div className="h-[400px] rounded-lg overflow-hidden border border-blue-500/20">
-                    <Enhanced3DModel
+                    <Medical3DErrorBoundary
                       modelType="tumor"
                       title="Tumor Progression Analysis"
-                      showControls={true}
-                      autoRotate={true}
                       className="w-full h-full"
-                    />
+                    >
+                      <Enhanced3DModel
+                        modelType="tumor"
+                        title="Tumor Progression Analysis"
+                        showControls={true}
+                        autoRotate={true}
+                        className="w-full h-full"
+                      />
+                    </Medical3DErrorBoundary>
                   </div>
                   <div className="mt-4 space-y-2">
                     <div className="flex items-center justify-between text-sm">
@@ -200,13 +207,19 @@ export default function Prognosis() {
                 </CardHeader>
                 <CardContent>
                   <div className="h-[400px] rounded-lg overflow-hidden border border-purple-500/20">
-                    <Enhanced3DModel
+                    <Medical3DErrorBoundary
                       modelType="brain"
                       title="Brain Anatomy Analysis"
-                      showControls={true}
-                      autoRotate={false}
                       className="w-full h-full"
-                    />
+                    >
+                      <Enhanced3DModel
+                        modelType="brain"
+                        title="Brain Anatomy Analysis"
+                        showControls={true}
+                        autoRotate={false}
+                        className="w-full h-full"
+                      />
+                    </Medical3DErrorBoundary>
                   </div>
                   <div className="mt-4 space-y-3">
                     <div className="p-3 bg-green-900/20 rounded-lg border border-green-500/30">
