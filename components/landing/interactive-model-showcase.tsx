@@ -21,6 +21,7 @@ import {
   Maximize,
 } from "lucide-react"
 import { Enhanced3DModel, BrainModel3D, TumorVisualization3D } from "@/components/dynamic-imports"
+import { ErrorBoundary } from "@/components/error-boundary"
 
 interface ModelShowcaseProps {
   className?: string
@@ -73,34 +74,54 @@ export function InteractiveModelShowcase({ className = "" }: ModelShowcaseProps)
   }
 
   const renderModel = () => {
-    switch (activeModel) {
-      case "brain":
-        return (
-          <BrainModel3D 
-            className="w-full h-full" 
-            autoRotate={isPlaying}
-          />
-        )
-      case "heart":
-        return (
-          <Enhanced3DModel
-            modelType="heart"
-            title="Interactive Heart Model"
-            showControls={false}
-            autoRotate={isPlaying}
-            className="w-full h-full"
-          />
-        )
-      case "tumor":
-        return (
-          <TumorVisualization3D 
-            className="w-full h-full"
-            autoRotate={isPlaying}
-          />
-        )
-      default:
-        return null
+    const ModelComponent = () => {
+      switch (activeModel) {
+        case "brain":
+          return (
+            <BrainModel3D
+              className="w-full h-full"
+              autoRotate={isPlaying}
+            />
+          )
+        case "heart":
+          return (
+            <Enhanced3DModel
+              modelType="heart"
+              title="Interactive Heart Model"
+              showControls={false}
+              autoRotate={isPlaying}
+              className="w-full h-full"
+            />
+          )
+        case "tumor":
+          return (
+            <TumorVisualization3D
+              className="w-full h-full"
+              autoRotate={isPlaying}
+            />
+          )
+        default:
+          return null
+      }
     }
+
+    return (
+      <ErrorBoundary
+        fallback={
+          <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-900/50 to-blue-900/50">
+            <div className="text-center space-y-4">
+              <div className="w-16 h-16 bg-blue-500/20 rounded-full flex items-center justify-center mx-auto">
+                <currentModel.icon className="w-8 h-8 text-blue-400" />
+              </div>
+              <p className="text-blue-300">{currentModel.name}</p>
+              <p className="text-gray-400 text-sm">3D model loading...</p>
+            </div>
+          </div>
+        }
+      >
+        <ModelComponent />
+      </ErrorBoundary>
+    )
   }
 
   return (

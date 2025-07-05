@@ -40,6 +40,7 @@ import {
 import { Enhanced3DModel, Immersive4DSpace, BrainModel3D, TumorVisualization3D } from "@/components/dynamic-imports"
 import { EnhancedParticleBackground, FloatingMedicalIcons, MedicalDataVisualization } from "@/components/ui-effects/enhanced-particle-background"
 import { InteractiveModelShowcase } from "@/components/landing/interactive-model-showcase"
+import { ErrorBoundary } from "@/components/error-boundary"
 
 export function LandingPage() {
   const [activeFeature, setActiveFeature] = useState(0)
@@ -173,14 +174,29 @@ export function LandingPage() {
   ]
 
   return (
-    <div className="min-h-screen bg-black text-white overflow-hidden relative">
-      {/* Enhanced Background Effects */}
-      <EnhancedParticleBackground
-        particleCount={60}
-        colors={["#3b82f6", "#8b5cf6", "#06b6d4", "#10b981", "#f59e0b"]}
-      />
-      <FloatingMedicalIcons />
-      <MedicalDataVisualization />
+    <ErrorBoundary
+      fallback={
+        <div className="min-h-screen bg-black text-white flex items-center justify-center">
+          <div className="text-center space-y-4">
+            <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
+              Quant-NEX Medical
+            </h1>
+            <p className="text-xl text-gray-300">Advanced Oncology Platform</p>
+            <p className="text-gray-400">Loading interactive features...</p>
+          </div>
+        </div>
+      }
+    >
+      <div className="min-h-screen bg-black text-white overflow-hidden relative">
+        {/* Enhanced Background Effects */}
+        <ErrorBoundary fallback={<div className="absolute inset-0 bg-black" />}>
+          <EnhancedParticleBackground
+            particleCount={60}
+            colors={["#3b82f6", "#8b5cf6", "#06b6d4", "#10b981", "#f59e0b"]}
+          />
+          <FloatingMedicalIcons />
+          <MedicalDataVisualization />
+        </ErrorBoundary>
 
       {/* Cursor Glow Effect */}
       <motion.div
@@ -406,7 +422,21 @@ export function LandingPage() {
               transition={{ duration: 0.8, delay: 0.2 }}
               className="relative lg:pl-8"
             >
-              <InteractiveModelShowcase className="h-[700px]" />
+              <ErrorBoundary
+                fallback={
+                  <div className="h-[700px] bg-gradient-to-br from-blue-900/20 to-purple-900/20 rounded-xl border border-blue-500/30 flex items-center justify-center">
+                    <div className="text-center space-y-4">
+                      <div className="w-16 h-16 bg-blue-500/20 rounded-full flex items-center justify-center mx-auto">
+                        <Brain className="w-8 h-8 text-blue-400" />
+                      </div>
+                      <p className="text-gray-300">3D Medical Models</p>
+                      <p className="text-gray-500 text-sm">Interactive visualization loading...</p>
+                    </div>
+                  </div>
+                }
+              >
+                <InteractiveModelShowcase className="h-[700px]" />
+              </ErrorBoundary>
             </motion.div>
           </div>
         </div>
@@ -748,13 +778,27 @@ export function LandingPage() {
               className="relative"
             >
               <div className="relative h-[500px] rounded-3xl overflow-hidden border border-cyan-500/30 bg-gradient-to-br from-cyan-900/10 to-purple-900/10 backdrop-blur-sm shadow-2xl">
-                <Enhanced3DModel
-                  modelType="brain"
-                  title="Interactive Brain Model"
-                  showControls={true}
-                  autoRotate={true}
-                  className="w-full h-full"
-                />
+                <ErrorBoundary
+                  fallback={
+                    <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-cyan-900/10 to-purple-900/10">
+                      <div className="text-center space-y-4">
+                        <div className="w-20 h-20 bg-cyan-500/20 rounded-full flex items-center justify-center mx-auto">
+                          <Brain className="w-10 h-10 text-cyan-400" />
+                        </div>
+                        <p className="text-cyan-300">Interactive Brain Model</p>
+                        <p className="text-gray-400 text-sm">3D visualization loading...</p>
+                      </div>
+                    </div>
+                  }
+                >
+                  <Enhanced3DModel
+                    modelType="brain"
+                    title="Interactive Brain Model"
+                    showControls={true}
+                    autoRotate={true}
+                    className="w-full h-full"
+                  />
+                </ErrorBoundary>
 
                 {/* Interactive Hotspots */}
                 <div className="absolute top-1/4 left-1/4">
@@ -1030,6 +1074,7 @@ export function LandingPage() {
           </motion.div>
         </div>
       </section>
-    </div>
+      </div>
+    </ErrorBoundary>
   )
 }

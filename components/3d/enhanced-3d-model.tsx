@@ -5,6 +5,7 @@ import { Canvas, useFrame } from "@react-three/fiber"
 import { OrbitControls, Text, Sphere, Box, Cylinder, Environment, PerspectiveCamera } from "@react-three/drei"
 import * as THREE from "three"
 import { Button } from "@/components/ui/button"
+import { ErrorBoundary } from "@/components/error-boundary"
 import { RotateCcw, ZoomIn, ZoomOut, Move3D } from "lucide-react"
 
 interface Enhanced3DModelProps {
@@ -240,15 +241,28 @@ export function Enhanced3DModel({
   return (
     <div className={`relative w-full h-full bg-black/20 rounded-lg overflow-hidden ${className}`}>
       {/* 3D Canvas */}
-      <Canvas
-        key={resetTrigger}
-        className="w-full h-full"
-        gl={{ 
-          antialias: true, 
-          alpha: true,
-          powerPreference: "high-performance"
-        }}
+      <ErrorBoundary
+        fallback={
+          <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-900/50 to-blue-900/50">
+            <div className="text-center space-y-4">
+              <div className="w-16 h-16 bg-blue-500/20 rounded-full flex items-center justify-center mx-auto">
+                <Move3D className="w-8 h-8 text-blue-400" />
+              </div>
+              <p className="text-blue-300">{title}</p>
+              <p className="text-gray-400 text-sm">3D model loading...</p>
+            </div>
+          </div>
+        }
       >
+        <Canvas
+          key={resetTrigger}
+          className="w-full h-full"
+          gl={{
+            antialias: true,
+            alpha: true,
+            powerPreference: "high-performance"
+          }}
+        >
         <PerspectiveCamera makeDefault position={[0, 0, 5]} fov={50} />
         
         {/* Lighting */}
@@ -285,8 +299,9 @@ export function Enhanced3DModel({
         >
           {title}
         </Text>
-      </Canvas>
-      
+        </Canvas>
+      </ErrorBoundary>
+
       {/* Control Panel */}
       {showControls && (
         <div className="absolute bottom-4 left-4 flex space-x-2">
