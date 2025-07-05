@@ -1,12 +1,7 @@
 "use client"
 
-import React, { Suspense, useRef, useState } from "react"
-import { useFrame } from "@react-three/fiber"
-import { Text, Sphere, Box, Cylinder } from "@react-three/drei"
-import * as THREE from "three"
-import { Button } from "@/components/ui/button"
-import { VercelOptimized3D } from "./vercel-optimized-3d"
-import { RotateCcw, ZoomIn, ZoomOut, Move3D } from "lucide-react"
+import React from "react"
+import { Stable3DSystem } from "@/components/medical-viz/stable-3d-system"
 
 interface Enhanced3DModelProps {
   modelType: "brain" | "heart" | "lung" | "liver" | "kidney" | "spine" | "tumor"
@@ -221,7 +216,7 @@ export function Enhanced3DModel({
 }: Enhanced3DModelProps) {
   return (
     <div className={`relative w-full h-full bg-black/20 rounded-lg overflow-hidden ${className}`}>
-      <VercelOptimized3D
+      <Stable3DSystem
         modelType={modelType}
         title={title}
         showControls={showControls}
