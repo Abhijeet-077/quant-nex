@@ -1,7 +1,6 @@
 "use client"
 
 import React, { Component, ErrorInfo, ReactNode } from 'react'
-import * as Sentry from '@sentry/nextjs'
 import { Button } from '@/components/ui/button'
 import { AlertTriangle, RefreshCw, Home } from 'lucide-react'
 
@@ -29,27 +28,26 @@ export class ErrorBoundary extends Component<Props, State> {
   }
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    // Log error to Sentry with medical application context
-    const errorId = Sentry.withScope((scope) => {
-      scope.setTag('component', 'error_boundary')
-      scope.setTag('error_type', 'react_error')
-      scope.setContext('error_boundary', {
-        componentStack: errorInfo.componentStack,
-        errorBoundary: this.constructor.name,
-      })
-      
-      // Remove any potential PHI from error info
-      const sanitizedErrorInfo = {
-        ...errorInfo,
-        componentStack: errorInfo.componentStack?.replace(
-          /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b/g, 
-          '[EMAIL-REDACTED]'
-        ),
-      }
-      
-      scope.setContext('react_error_info', sanitizedErrorInfo)
-      
-      return Sentry.captureException(error)
+    // Generate a unique error ID for tracking
+    const errorId = `ERR-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
+
+    // Log error with medical application context (HIPAA compliant)
+    const sanitizedErrorInfo = {
+      ...errorInfo,
+      componentStack: errorInfo.componentStack?.replace(
+        /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b/g,
+        '[EMAIL-REDACTED]'
+      ),
+    }
+
+    // Log to console for development and server logs for production
+    console.error('Error Boundary caught an error:', {
+      errorId,
+      message: error.message,
+      stack: error.stack,
+      componentStack: sanitizedErrorInfo.componentStack,
+      timestamp: new Date().toISOString(),
+      userAgent: typeof window !== 'undefined' ? window.navigator.userAgent : 'server',
     })
 
     this.setState({ errorId })
@@ -58,8 +56,6 @@ export class ErrorBoundary extends Component<Props, State> {
     if (this.props.onError) {
       this.props.onError(error, errorInfo)
     }
-
-    console.error('Error Boundary caught an error:', error, errorInfo)
   }
 
   handleRetry = () => {
@@ -167,26 +163,25 @@ export function withErrorBoundary<P extends object>(
 }
 
 // Specialized error boundary for medical components
-export function MedicalErrorBoundary({ 
-  children, 
-  componentName 
-}: { 
+export function MedicalErrorBoundary({
+  children,
+  componentName
+}: {
   children: ReactNode
-  componentName: string 
+  componentName: string
 }) {
   return (
     <ErrorBoundary
       onError={(error, errorInfo) => {
-        // Enhanced logging for medical components
-        Sentry.withScope((scope) => {
-          scope.setTag('medical_component', componentName)
-          scope.setTag('error_type', 'medical_component_error')
-          scope.setContext('medical_context', {
-            component: componentName,
-            timestamp: new Date().toISOString(),
-            userAgent: navigator.userAgent,
-          })
-          Sentry.captureException(error)
+        // Enhanced logging for medical components (HIPAA compliant)
+        const errorId = `MED-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
+        console.error('Medical Component Error:', {
+          errorId,
+          component: componentName,
+          message: error.message,
+          stack: error.stack,
+          timestamp: new Date().toISOString(),
+          userAgent: typeof window !== 'undefined' ? window.navigator.userAgent : 'server',
         })
       }}
       fallback={
@@ -196,7 +191,7 @@ export function MedicalErrorBoundary({
             <h3 className="text-red-300 font-semibold">Medical Component Error</h3>
           </div>
           <p className="text-gray-300 text-sm">
-            The {componentName} component encountered an error. 
+            The {componentName} component encountered an error.
             Please refresh the page or contact support if the issue persists.
           </p>
           <Button
@@ -218,17 +213,24 @@ export function MedicalErrorBoundary({
 // Hook for manual error reporting
 export function useErrorReporting() {
   const reportError = (error: Error, context?: Record<string, any>) => {
-    Sentry.withScope((scope) => {
-      if (context) {
-        scope.setContext('manual_report', context)
-      }
-      scope.setTag('error_type', 'manual_report')
-      Sentry.captureException(error)
+    const errorId = `RPT-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
+    console.error('Manual Error Report:', {
+      errorId,
+      message: error.message,
+      stack: error.stack,
+      context,
+      timestamp: new Date().toISOString(),
     })
   }
 
   const reportMessage = (message: string, level: 'info' | 'warning' | 'error' = 'error') => {
-    Sentry.captureMessage(message, level)
+    const messageId = `MSG-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
+    console[level]('Manual Message Report:', {
+      messageId,
+      message,
+      level,
+      timestamp: new Date().toISOString(),
+    })
   }
 
   return { reportError, reportMessage }

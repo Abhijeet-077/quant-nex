@@ -11,7 +11,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Checkbox } from "@/components/ui/checkbox"
-import { Fingerprint, KeyRound, Loader2, LogIn, Mail, ShieldCheck, User } from "lucide-react"
+import { Fingerprint, KeyRound, Loader2, LogIn, Mail, ShieldCheck, User, Eye, EyeOff } from "lucide-react"
 import { ParticleBackground } from "../ui-effects/particle-background"
 import { useAuth } from "@/contexts/auth-context"
 import { useToast } from "@/components/ui/use-toast"
@@ -22,6 +22,11 @@ export function LoginForm() {
   const { toast } = useToast()
   const [isLoading, setIsLoading] = useState(false)
   const [activeTab, setActiveTab] = useState("login")
+
+  // Password visibility state
+  const [showLoginPassword, setShowLoginPassword] = useState(false)
+  const [showRegisterPassword, setShowRegisterPassword] = useState(false)
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 
   // Login form state
   const [loginEmail, setLoginEmail] = useState("")
@@ -190,13 +195,21 @@ export function LoginForm() {
                     <KeyRound className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
                     <Input
                       id="password"
-                      type="password"
+                      type={showLoginPassword ? "text" : "password"}
                       placeholder="••••••••"
-                      className="pl-10"
+                      className="pl-10 pr-10"
                       required
                       value={loginPassword}
                       onChange={(e) => setLoginPassword(e.target.value)}
                     />
+                    <button
+                      type="button"
+                      onClick={() => setShowLoginPassword(!showLoginPassword)}
+                      className="absolute right-3 top-3 h-4 w-4 text-gray-400 hover:text-blue-400 transition-colors duration-200 focus:outline-none focus:text-blue-400"
+                      aria-label={showLoginPassword ? "Hide password" : "Show password"}
+                    >
+                      {showLoginPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                    </button>
                   </div>
                 </div>
 
@@ -292,13 +305,21 @@ export function LoginForm() {
                     <KeyRound className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
                     <Input
                       id="registerPassword"
-                      type="password"
+                      type={showRegisterPassword ? "text" : "password"}
                       placeholder="••••••••"
-                      className="pl-10"
+                      className="pl-10 pr-10"
                       required
                       value={registerPassword}
                       onChange={(e) => setRegisterPassword(e.target.value)}
                     />
+                    <button
+                      type="button"
+                      onClick={() => setShowRegisterPassword(!showRegisterPassword)}
+                      className="absolute right-3 top-3 h-4 w-4 text-gray-400 hover:text-blue-400 transition-colors duration-200 focus:outline-none focus:text-blue-400"
+                      aria-label={showRegisterPassword ? "Hide password" : "Show password"}
+                    >
+                      {showRegisterPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                    </button>
                   </div>
                 </div>
 
@@ -308,13 +329,21 @@ export function LoginForm() {
                     <KeyRound className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
                     <Input
                       id="confirmPassword"
-                      type="password"
+                      type={showConfirmPassword ? "text" : "password"}
                       placeholder="••••••••"
-                      className="pl-10"
+                      className="pl-10 pr-10"
                       required
                       value={confirmPassword}
                       onChange={(e) => setConfirmPassword(e.target.value)}
                     />
+                    <button
+                      type="button"
+                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                      className="absolute right-3 top-3 h-4 w-4 text-gray-400 hover:text-blue-400 transition-colors duration-200 focus:outline-none focus:text-blue-400"
+                      aria-label={showConfirmPassword ? "Hide password" : "Show password"}
+                    >
+                      {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                    </button>
                   </div>
                 </div>
 
