@@ -1,11 +1,11 @@
 "use client"
 
 import React, { Suspense, useRef, useState } from "react"
-import { Canvas, useFrame } from "@react-three/fiber"
-import { OrbitControls, Text, Sphere, Box, Cylinder, Environment, PerspectiveCamera } from "@react-three/drei"
+import { useFrame } from "@react-three/fiber"
+import { Text, Sphere, Box, Cylinder } from "@react-three/drei"
 import * as THREE from "three"
 import { Button } from "@/components/ui/button"
-import { ErrorBoundary } from "@/components/error-boundary"
+import { Reliable3DWrapper } from "./reliable-3d-wrapper"
 import { RotateCcw, ZoomIn, ZoomOut, Move3D } from "lucide-react"
 
 interface Enhanced3DModelProps {
@@ -212,15 +212,13 @@ function OrganModel({
   return <group ref={meshRef}>{getModelGeometry()}</group>
 }
 
-export function Enhanced3DModel({ 
-  modelType, 
-  title, 
-  showControls = true, 
+export function Enhanced3DModel({
+  modelType,
+  title,
+  showControls = true,
   autoRotate = true,
   className = ""
 }: Enhanced3DModelProps) {
-  const [resetTrigger, setResetTrigger] = useState(0)
-
   const renderModel = () => {
     switch (modelType) {
       case "brain":
@@ -234,61 +232,17 @@ export function Enhanced3DModel({
     }
   }
 
-  const handleReset = () => {
-    setResetTrigger(prev => prev + 1)
-  }
-
   return (
     <div className={`relative w-full h-full bg-black/20 rounded-lg overflow-hidden ${className}`}>
-      {/* 3D Canvas */}
-      <ErrorBoundary
-        fallback={
-          <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-900/50 to-blue-900/50">
-            <div className="text-center space-y-4">
-              <div className="w-16 h-16 bg-blue-500/20 rounded-full flex items-center justify-center mx-auto">
-                <Move3D className="w-8 h-8 text-blue-400" />
-              </div>
-              <p className="text-blue-300">{title}</p>
-              <p className="text-gray-400 text-sm">3D model loading...</p>
-            </div>
-          </div>
-        }
+      <Reliable3DWrapper
+        modelType={modelType}
+        title={title}
+        showControls={showControls}
+        autoRotate={autoRotate}
+        className="w-full h-full"
       >
-        <Canvas
-          key={resetTrigger}
-          className="w-full h-full"
-          gl={{
-            antialias: true,
-            alpha: true,
-            powerPreference: "high-performance"
-          }}
-        >
-        <PerspectiveCamera makeDefault position={[0, 0, 5]} fov={50} />
-        
-        {/* Lighting */}
-        <ambientLight intensity={0.4} />
-        <directionalLight position={[10, 10, 5]} intensity={1} />
-        <pointLight position={[-10, -10, -5]} intensity={0.5} />
-        
-        {/* Environment */}
-        <Environment preset="studio" />
-        
-        {/* 3D Model */}
-        <Suspense fallback={null}>
-          {renderModel()}
-        </Suspense>
-        
-        {/* Controls */}
-        <OrbitControls
-          enablePan={true}
-          enableZoom={true}
-          enableRotate={true}
-          autoRotate={autoRotate}
-          autoRotateSpeed={1}
-          minDistance={2}
-          maxDistance={10}
-        />
-        
+        {renderModel()}
+
         {/* Title */}
         <Text
           position={[0, 3, 0]}
@@ -299,27 +253,7 @@ export function Enhanced3DModel({
         >
           {title}
         </Text>
-        </Canvas>
-      </ErrorBoundary>
-
-      {/* Control Panel */}
-      {showControls && (
-        <div className="absolute bottom-4 left-4 flex space-x-2">
-          <Button
-            size="sm"
-            variant="outline"
-            onClick={handleReset}
-            className="bg-black/50 border-blue-500/30 text-white hover:bg-black/70"
-          >
-            <RotateCcw className="h-4 w-4" />
-          </Button>
-        </div>
-      )}
-      
-      {/* Loading Indicator */}
-      <div className="absolute top-4 right-4">
-        <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-      </div>
+      </Reliable3DWrapper>
     </div>
   )
 }

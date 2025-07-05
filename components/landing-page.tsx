@@ -37,10 +37,48 @@ import {
   ZoomIn,
   Move3D,
 } from "lucide-react"
-import { Enhanced3DModel, Immersive4DSpace, BrainModel3D, TumorVisualization3D } from "@/components/dynamic-imports"
-import { EnhancedParticleBackground, FloatingMedicalIcons, MedicalDataVisualization } from "@/components/ui-effects/enhanced-particle-background"
-import { InteractiveModelShowcase } from "@/components/landing/interactive-model-showcase"
+import dynamic from "next/dynamic"
 import { ErrorBoundary } from "@/components/error-boundary"
+
+// Lazy load heavy 3D components
+const Enhanced3DModel = dynamic(() => import("@/components/dynamic-imports").then(mod => ({ default: mod.Enhanced3DModel })), {
+  loading: () => (
+    <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-900/50 to-blue-900/50">
+      <div className="text-center space-y-4">
+        <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+        <p className="text-blue-300">Loading 3D Model...</p>
+      </div>
+    </div>
+  ),
+  ssr: false
+})
+
+const InteractiveModelShowcase = dynamic(() => import("@/components/landing/interactive-model-showcase").then(mod => ({ default: mod.InteractiveModelShowcase })), {
+  loading: () => (
+    <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-900/50 to-blue-900/50">
+      <div className="text-center space-y-4">
+        <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+        <p className="text-blue-300">Loading Interactive Models...</p>
+      </div>
+    </div>
+  ),
+  ssr: false
+})
+
+const EnhancedParticleBackground = dynamic(() => import("@/components/ui-effects/enhanced-particle-background").then(mod => ({ default: mod.EnhancedParticleBackground })), {
+  loading: () => <div className="absolute inset-0 bg-black" />,
+  ssr: false
+})
+
+const FloatingMedicalIcons = dynamic(() => import("@/components/ui-effects/enhanced-particle-background").then(mod => ({ default: mod.FloatingMedicalIcons })), {
+  loading: () => null,
+  ssr: false
+})
+
+const MedicalDataVisualization = dynamic(() => import("@/components/ui-effects/enhanced-particle-background").then(mod => ({ default: mod.MedicalDataVisualization })), {
+  loading: () => null,
+  ssr: false
+})
 
 export function LandingPage() {
   const [activeFeature, setActiveFeature] = useState(0)
@@ -272,13 +310,13 @@ export function LandingPage() {
         </div>
 
         <div className="container mx-auto px-4 z-10 relative">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center min-h-screen">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center min-h-screen">
             {/* Left Content */}
             <motion.div
               initial={{ opacity: 0, x: -50 }}
               animate={{ opacity: isVisible ? 1 : 0, x: isVisible ? 0 : -50 }}
               transition={{ duration: 0.8 }}
-              className="space-y-8 lg:pr-8"
+              className="space-y-6 lg:space-y-8 lg:pr-8 order-2 lg:order-1 px-4 lg:px-0"
             >
               <motion.div
                 className="space-y-6"
@@ -298,7 +336,7 @@ export function LandingPage() {
                 </motion.div>
 
                 <motion.h1
-                  className="text-5xl md:text-7xl font-bold leading-tight"
+                  className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold leading-tight"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.8, delay: 0.4 }}
@@ -331,7 +369,7 @@ export function LandingPage() {
                 </motion.h1>
 
                 <motion.p
-                  className="text-xl text-gray-300 leading-relaxed max-w-2xl"
+                  className="text-base sm:text-lg lg:text-xl text-gray-300 leading-relaxed max-w-2xl"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.8, delay: 0.5 }}
@@ -348,12 +386,12 @@ export function LandingPage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.7 }}
               >
-                <Link href="/dashboard">
+                <Link href="/login">
                   <motion.div
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                   >
-                    <Button className="bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 px-8 py-4 text-lg font-semibold group relative overflow-hidden">
+                    <Button className="bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-semibold group relative overflow-hidden w-full sm:w-auto">
                       <motion.div
                         className="absolute inset-0 bg-gradient-to-r from-cyan-500 to-blue-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
                         initial={false}
@@ -365,21 +403,11 @@ export function LandingPage() {
                     </Button>
                   </motion.div>
                 </Link>
-
-                <motion.div
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  <Button variant="outline" className="border-blue-500 text-blue-400 hover:bg-blue-500/10 hover:text-white px-8 py-4 text-lg font-semibold group backdrop-blur-sm">
-                    <Play className="mr-2 h-5 w-5 group-hover:scale-110 transition-transform duration-300" />
-                    Watch Demo
-                  </Button>
-                </motion.div>
               </motion.div>
 
               {/* Enhanced Stats Grid */}
               <motion.div
-                className="grid grid-cols-2 lg:grid-cols-3 gap-4 pt-8"
+                className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 pt-6 lg:pt-8"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.8 }}
@@ -420,7 +448,7 @@ export function LandingPage() {
               initial={{ opacity: 0, x: 50 }}
               animate={{ opacity: isVisible ? 1 : 0, x: isVisible ? 0 : 50 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="relative lg:pl-8"
+              className="relative lg:pl-8 order-1 lg:order-2 px-4 lg:px-0"
             >
               <ErrorBoundary
                 fallback={
@@ -435,7 +463,7 @@ export function LandingPage() {
                   </div>
                 }
               >
-                <InteractiveModelShowcase className="h-[700px]" />
+                <InteractiveModelShowcase className="h-[400px] sm:h-[500px] lg:h-[700px]" />
               </ErrorBoundary>
             </motion.div>
           </div>
@@ -759,15 +787,7 @@ export function LandingPage() {
                 ))}
               </div>
 
-              <motion.div
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <Button className="bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 px-8 py-4 text-lg font-semibold">
-                  <Play className="mr-2 h-5 w-5" />
-                  Watch Demo Video
-                </Button>
-              </motion.div>
+
             </motion.div>
 
             <motion.div
