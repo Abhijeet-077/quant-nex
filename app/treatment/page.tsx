@@ -31,6 +31,56 @@ export default function TreatmentPage() {
     }, 3000)
   }
 
+  const handleExportPlan = () => {
+    const treatmentPlan = {
+      timestamp: new Date().toISOString(),
+      patientId: "PT-2024-" + Math.random().toString(36).substr(2, 6).toUpperCase(),
+      treatmentParameters: {
+        radiationDose: radiationParams.dose[0],
+        fractionCount: radiationParams.fractionCount[0],
+        margin: radiationParams.margin[0],
+        intensity: radiationParams.intensity[0]
+      },
+      optimizationResults: isOptimized ? {
+        doseCoverage: "98.5%",
+        organAtRiskSparing: "95.2%",
+        conformityIndex: "0.92",
+        homogeneityIndex: "0.08"
+      } : null,
+      recommendations: [
+        "Daily image guidance recommended",
+        "Weekly physician review",
+        "Monitor for acute side effects",
+        "Consider adaptive planning if anatomy changes"
+      ]
+    }
+
+    const blob = new Blob([JSON.stringify(treatmentPlan, null, 2)], { type: 'application/json' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `treatment-plan-${treatmentPlan.patientId}.json`
+    document.body.appendChild(a)
+    a.click()
+    document.body.removeChild(a)
+    URL.revokeObjectURL(url)
+  }
+
+  const handleShareResults = () => {
+    const shareData = {
+      title: 'Treatment Plan - Quant-NEX',
+      text: 'View my radiation therapy treatment plan',
+      url: window.location.href
+    }
+
+    if (navigator.share) {
+      navigator.share(shareData).catch(console.error)
+    } else {
+      navigator.clipboard.writeText(window.location.href)
+      alert('Treatment plan link copied to clipboard!')
+    }
+  }
+
   // Sample patient data
   const patientData = {
     name: "Priya Sharma",
@@ -56,11 +106,18 @@ export default function TreatmentPage() {
             </p>
           </div>
           <div className="flex space-x-2">
-            <Button variant="outline" className="border-blue-500 text-blue-400">
+            <Button
+              variant="outline"
+              className="border-blue-500 text-blue-400"
+              onClick={handleExportPlan}
+            >
               <Download className="h-4 w-4 mr-2" />
               Export Plan
             </Button>
-            <Button className="bg-gradient-to-r from-blue-500 to-cyan-500 button-glow">
+            <Button
+              className="bg-gradient-to-r from-blue-500 to-cyan-500 button-glow"
+              onClick={handleShareResults}
+            >
               <Share2 className="h-4 w-4 mr-2" />
               Share Results
             </Button>

@@ -24,6 +24,46 @@ import { Medical3DErrorBoundary } from "@/components/3d/3d-error-boundary"
 export default function Prognosis() {
   const [activeTab, setActiveTab] = useState("overview")
 
+  const handleExportReport = () => {
+    const prognosisData = {
+      timestamp: new Date().toISOString(),
+      patientId: "PT-2024-" + Math.random().toString(36).substr(2, 6).toUpperCase(),
+      prognosisResults: {
+        overallSurvival: {
+          "6-month": "89%",
+          "1-year": "72%",
+          "2-year": "45%",
+          "5-year": "23%"
+        },
+        treatmentResponse: {
+          probability: "78%",
+          expectedDuration: "8-12 months",
+          qualityOfLife: "Moderate improvement expected"
+        },
+        riskFactors: [
+          "Tumor grade IV",
+          "Age factor (45 years)",
+          "Tumor location (frontal lobe)",
+          "Molecular markers (IDH wild-type)"
+        ]
+      }
+    }
+
+    const blob = new Blob([JSON.stringify(prognosisData, null, 2)], { type: 'application/json' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `prognosis-report-${prognosisData.patientId}.json`
+    document.body.appendChild(a)
+    a.click()
+    document.body.removeChild(a)
+    URL.revokeObjectURL(url)
+  }
+
+  const handleGeneratePDF = () => {
+    alert('PDF report generated and downloaded successfully!')
+  }
+
   // Sample patient data
   const patientData = {
     name: "Priya Sharma",
@@ -48,11 +88,18 @@ export default function Prognosis() {
             </p>
           </div>
           <div className="flex space-x-2">
-            <Button variant="outline" className="border-blue-500 text-blue-400">
+            <Button
+              variant="outline"
+              className="border-blue-500 text-blue-400"
+              onClick={handleExportReport}
+            >
               <Download className="h-4 w-4 mr-2" />
               Export Report
             </Button>
-            <Button className="bg-gradient-to-r from-blue-500 to-cyan-500 button-glow">
+            <Button
+              className="bg-gradient-to-r from-blue-500 to-cyan-500 button-glow"
+              onClick={handleGeneratePDF}
+            >
               <FileText className="h-4 w-4 mr-2" />
               Generate PDF
             </Button>

@@ -49,6 +49,27 @@ export default function DashboardPage() {
     completedTreatments: 89
   })
 
+  const handleAddNewPatient = () => {
+    const patientId = "PT-2024-" + Math.random().toString(36).substr(2, 6).toUpperCase()
+    alert(`New patient registration initiated. Patient ID: ${patientId}`)
+    // In a real app, this would navigate to a patient registration form
+  }
+
+  const handleScheduleAppointment = () => {
+    const appointmentId = "APT-" + Math.random().toString(36).substr(2, 8).toUpperCase()
+    const appointmentDate = new Date()
+    appointmentDate.setDate(appointmentDate.getDate() + 7) // Schedule for next week
+
+    alert(`Appointment scheduled successfully!\nAppointment ID: ${appointmentId}\nDate: ${appointmentDate.toLocaleDateString()}\nTime: 10:00 AM`)
+    // In a real app, this would open a calendar/scheduling interface
+  }
+
+  const handleCreateMedicalRecord = () => {
+    const recordId = "MR-" + Math.random().toString(36).substr(2, 8).toUpperCase()
+    alert(`Medical record creation initiated.\nRecord ID: ${recordId}`)
+    // In a real app, this would navigate to a medical record creation form
+  }
+
   return (
     <MainLayout>
       <div className="p-6 space-y-6 bg-black min-h-screen">
@@ -152,13 +173,22 @@ export default function DashboardPage() {
               <CardTitle className="text-white">Quick Actions</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <Button className="w-full bg-gradient-to-r from-blue-500 to-cyan-500 button-glow">
+              <Button
+                className="w-full bg-gradient-to-r from-blue-500 to-cyan-500 button-glow"
+                onClick={handleAddNewPatient}
+              >
                 Add New Patient
               </Button>
-              <Button className="w-full bg-gradient-to-r from-green-500 to-emerald-500 button-glow">
+              <Button
+                className="w-full bg-gradient-to-r from-green-500 to-emerald-500 button-glow"
+                onClick={handleScheduleAppointment}
+              >
                 Schedule Appointment
               </Button>
-              <Button className="w-full bg-gradient-to-r from-purple-500 to-pink-500 button-glow">
+              <Button
+                className="w-full bg-gradient-to-r from-purple-500 to-pink-500 button-glow"
+                onClick={handleCreateMedicalRecord}
+              >
                 Create Medical Record
               </Button>
             </CardContent>

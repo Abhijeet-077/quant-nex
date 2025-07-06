@@ -2,7 +2,7 @@
 
 import { Suspense } from "react"
 import { ErrorBoundary } from "@/components/error-boundary"
-import { LandingPage } from "@/components/landing-page"
+import { LandingPageNew } from "@/components/landing-page-new"
 import { LandingPageFallback } from "@/components/landing-page-fallback"
 
 // Loading component for Suspense
@@ -30,7 +30,7 @@ export default function Home() {
       }}
     >
       <Suspense fallback={<LandingPageLoading />}>
-        <LandingPage />
+        <LandingPageNew />
       </Suspense>
     </ErrorBoundary>
   )

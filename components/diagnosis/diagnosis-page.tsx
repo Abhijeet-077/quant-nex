@@ -59,17 +59,194 @@ export function DiagnosisPage() {
     }, 2000)
   }
 
+  const handleShare = () => {
+    if (!selectedImage) return
+
+    // Create shareable link with analysis results
+    const shareData = {
+      title: 'Medical Diagnosis Analysis - Quant-NEX',
+      text: 'View my medical diagnosis analysis results',
+      url: window.location.href
+    }
+
+    if (navigator.share) {
+      navigator.share(shareData).catch(console.error)
+    } else {
+      // Fallback: copy to clipboard
+      navigator.clipboard.writeText(window.location.href)
+      alert('Analysis link copied to clipboard!')
+    }
+  }
+
+  const handleExport = () => {
+    if (!selectedImage || !isAnalyzed) return
+
+    // Generate comprehensive report data
+    const reportData = {
+      timestamp: new Date().toISOString(),
+      patientId: "PT-2024-" + Math.random().toString(36).substr(2, 6).toUpperCase(),
+      analysisResults: {
+        confidence: "94.2%",
+        classification: "Glioblastoma Grade IV",
+        tumorSize: "3.2 cm x 2.8 cm",
+        location: "Right frontal lobe",
+        recommendations: [
+          "Further diagnostic imaging recommended",
+          "Biopsy to confirm classification",
+          "Consultation with neuro-oncology team"
+        ]
+      },
+      imageData: selectedImage
+    }
+
+    // Create and download JSON report
+    const blob = new Blob([JSON.stringify(reportData, null, 2)], { type: 'application/json' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `diagnosis-report-${reportData.patientId}.json`
+    document.body.appendChild(a)
+    a.click()
+    document.body.removeChild(a)
+    URL.revokeObjectURL(url)
+  }
+
+  const handleGenerateDetailedReport = () => {
+    if (!selectedImage || !isAnalyzed) return
+
+    // Generate comprehensive PDF-style report
+    const detailedReport = {
+      reportId: "RPT-" + Math.random().toString(36).substr(2, 8).toUpperCase(),
+      timestamp: new Date().toISOString(),
+      patientInfo: {
+        id: "PT-2024-" + Math.random().toString(36).substr(2, 6).toUpperCase(),
+        name: "Patient Name",
+        age: "54",
+        gender: "Female",
+        studyDate: new Date().toLocaleDateString()
+      },
+      clinicalFindings: {
+        primaryDiagnosis: "Glioblastoma Grade IV",
+        confidence: "94.2%",
+        tumorCharacteristics: {
+          size: "3.2 cm x 2.8 cm x 2.1 cm",
+          location: "Right frontal lobe",
+          enhancement: "Heterogeneous ring enhancement",
+          edema: "Moderate perilesional edema",
+          massEffect: "Mild midline shift (3mm)"
+        },
+        differentialDiagnosis: [
+          "Glioblastoma multiforme (primary)",
+          "Metastatic lesion (secondary)",
+          "High-grade astrocytoma"
+        ]
+      },
+      recommendations: [
+        "Immediate neurosurgical consultation",
+        "MRI with contrast for surgical planning",
+        "Tissue biopsy for histopathological confirmation",
+        "Molecular profiling (IDH1/2, MGMT methylation)",
+        "Multidisciplinary team discussion"
+      ],
+      followUp: "Urgent - within 24-48 hours",
+      reportingPhysician: "Dr. AI Assistant",
+      disclaimer: "This AI-generated report requires validation by a qualified radiologist."
+    }
+
+    // Create detailed HTML report
+    const htmlContent = `
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <title>Detailed Medical Report - ${detailedReport.reportId}</title>
+          <style>
+            body { font-family: Arial, sans-serif; margin: 20px; line-height: 1.6; }
+            .header { border-bottom: 2px solid #333; padding-bottom: 10px; margin-bottom: 20px; }
+            .section { margin-bottom: 20px; }
+            .section h3 { color: #333; border-bottom: 1px solid #ccc; padding-bottom: 5px; }
+            .findings { background: #f9f9f9; padding: 15px; border-radius: 5px; }
+            .recommendations { background: #e8f4fd; padding: 15px; border-radius: 5px; }
+            .disclaimer { background: #fff3cd; padding: 10px; border-radius: 5px; font-style: italic; }
+          </style>
+        </head>
+        <body>
+          <div class="header">
+            <h1>Quant-NEX Medical Diagnosis Report</h1>
+            <p><strong>Report ID:</strong> ${detailedReport.reportId}</p>
+            <p><strong>Generated:</strong> ${new Date(detailedReport.timestamp).toLocaleString()}</p>
+          </div>
+
+          <div class="section">
+            <h3>Patient Information</h3>
+            <p><strong>Patient ID:</strong> ${detailedReport.patientInfo.id}</p>
+            <p><strong>Study Date:</strong> ${detailedReport.patientInfo.studyDate}</p>
+          </div>
+
+          <div class="section findings">
+            <h3>Clinical Findings</h3>
+            <p><strong>Primary Diagnosis:</strong> ${detailedReport.clinicalFindings.primaryDiagnosis}</p>
+            <p><strong>Confidence Level:</strong> ${detailedReport.clinicalFindings.confidence}</p>
+            <h4>Tumor Characteristics:</h4>
+            <ul>
+              <li><strong>Size:</strong> ${detailedReport.clinicalFindings.tumorCharacteristics.size}</li>
+              <li><strong>Location:</strong> ${detailedReport.clinicalFindings.tumorCharacteristics.location}</li>
+              <li><strong>Enhancement:</strong> ${detailedReport.clinicalFindings.tumorCharacteristics.enhancement}</li>
+              <li><strong>Edema:</strong> ${detailedReport.clinicalFindings.tumorCharacteristics.edema}</li>
+              <li><strong>Mass Effect:</strong> ${detailedReport.clinicalFindings.tumorCharacteristics.massEffect}</li>
+            </ul>
+          </div>
+
+          <div class="section recommendations">
+            <h3>Recommendations</h3>
+            <ul>
+              ${detailedReport.recommendations.map(rec => `<li>${rec}</li>`).join('')}
+            </ul>
+            <p><strong>Follow-up:</strong> ${detailedReport.followUp}</p>
+          </div>
+
+          <div class="disclaimer">
+            <p><strong>Disclaimer:</strong> ${detailedReport.disclaimer}</p>
+          </div>
+        </body>
+      </html>
+    `
+
+    // Create and download HTML report
+    const blob = new Blob([htmlContent], { type: 'text/html' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `detailed-report-${detailedReport.reportId}.html`
+    document.body.appendChild(a)
+    a.click()
+    document.body.removeChild(a)
+    URL.revokeObjectURL(url)
+
+    // Show success message
+    alert('Detailed report generated and downloaded successfully!')
+  }
+
   return (
     <MainLayout>
       <div className="grid grid-cols-12 gap-6 p-6">
         <div className="col-span-12 flex justify-between items-center">
           <h1 className="text-2xl font-bold">Diagnosis</h1>
           <div className="flex space-x-2">
-            <Button variant="outline" size="sm">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleShare}
+              disabled={!selectedImage}
+            >
               <Share2 className="h-4 w-4 mr-2" />
               Share
             </Button>
-            <Button variant="outline" size="sm">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleExport}
+              disabled={!selectedImage || !isAnalyzed}
+            >
               <Download className="h-4 w-4 mr-2" />
               Export
             </Button>
@@ -340,7 +517,11 @@ export function DiagnosisPage() {
                   </ul>
                 </div>
 
-                <Button className="w-full bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-600 hover:to-purple-700">
+                <Button
+                  className="w-full bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-600 hover:to-purple-700"
+                  onClick={handleGenerateDetailedReport}
+                  disabled={!isAnalyzed}
+                >
                   Generate Detailed Report
                 </Button>
               </div>

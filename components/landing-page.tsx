@@ -321,7 +321,15 @@ export function LandingPage() {
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                   >
-                    <Button className="bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-semibold group relative overflow-hidden w-full sm:w-auto">
+                    <Button 
+                      className="bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-semibold group relative overflow-hidden w-full sm:w-auto"
+                      onClick={(e) => {
+                        if (isModelLoading) {
+                          e.preventDefault()
+                          // 这里可以添加toast提示
+                        }
+                      }}
+                    >
                       <motion.div
                         className="absolute inset-0 bg-gradient-to-r from-cyan-500 to-blue-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
                         initial={false}
@@ -534,7 +542,10 @@ export function LandingPage() {
                           variant="ghost"
                           size="sm"
                           className="text-blue-400 hover:text-blue-300 hover:bg-blue-500/10 p-0 h-auto font-medium"
-                          onClick={() => handleModelSwitch(feature.modelType)}
+                          onClick={(e) => {
+                            e.preventDefault()
+                            handleModelSwitch(feature.modelType)
+                          }}
                         >
                           View 3D Model
                           <ArrowRight className="ml-2 h-4 w-4" />
