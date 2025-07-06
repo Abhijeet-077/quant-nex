@@ -23,13 +23,13 @@ import {
   Triangle
 } from "lucide-react"
 
-// Dynamic import for production 3D system
-const Production3DSystem = dynamic(() => import("@/components/medical-3d/production-3d-system").then(mod => ({ default: mod.Production3DSystem })), {
+// Dynamic import for reliable 3D system
+const Reliable3DSystem = dynamic(() => import("@/components/medical-3d/reliable-3d-system").then(mod => ({ default: mod.Reliable3DSystem })), {
   loading: () => (
     <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-900/50 to-blue-900/50 rounded-lg">
       <div className="text-center space-y-4">
         <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
-        <p className="text-blue-300">Loading Advanced 3D Medical Model...</p>
+        <p className="text-blue-300">Loading Medical Visualization...</p>
       </div>
     </div>
   ),
@@ -225,7 +225,7 @@ export default function Medical3DModelsPage() {
               </CardHeader>
               <CardContent>
                 <div className="h-[600px] rounded-lg overflow-hidden">
-                  <Production3DSystem
+                  <Reliable3DSystem
                     modelType={selectedModel.type}
                     title={selectedModel.title}
                     showControls={modelSettings.showControls}
