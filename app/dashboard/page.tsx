@@ -28,13 +28,13 @@ import {
 } from "@/components/medical-viz/simple-medical-charts"
 import dynamic from "next/dynamic"
 
-// Dynamic import for 3D system to prevent SSR issues
-const Stable3DSystem = dynamic(() => import("@/components/medical-viz/stable-3d-system").then(mod => ({ default: mod.Stable3DSystem })), {
+// Dynamic import for production 3D system to prevent SSR issues
+const Production3DSystem = dynamic(() => import("@/components/medical-3d/production-3d-system").then(mod => ({ default: mod.Production3DSystem })), {
   loading: () => (
     <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-900/50 to-blue-900/50">
       <div className="text-center space-y-4">
         <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
-        <p className="text-blue-300">Loading 3D Model...</p>
+        <p className="text-blue-300">Loading Advanced 3D Medical Model...</p>
       </div>
     </div>
   ),
@@ -108,24 +108,29 @@ export default function DashboardPage() {
           {/* Patient Vitals */}
           <PatientVitalsChart className="h-[400px]" />
 
-          {/* 3D Medical Model Placeholder */}
+          {/* Advanced 3D Medical Model */}
           <Card className="card-glow">
             <CardHeader>
               <CardTitle className="text-white flex items-center">
                 <Brain className="w-5 h-5 mr-2 text-blue-400" />
-                3D Medical Visualization
+                Advanced 3D Medical Visualization
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="h-[400px] flex items-center justify-center bg-gradient-to-br from-gray-900/50 to-blue-900/50 rounded-lg">
-                <div className="text-center space-y-4">
-                  <Brain className="w-16 h-16 text-blue-400 mx-auto" />
-                  <p className="text-blue-300 font-medium">3D Brain Model</p>
-                  <p className="text-gray-400 text-sm">Interactive medical visualization</p>
-                  <Button className="bg-blue-600 hover:bg-blue-700">
-                    View 3D Model
-                  </Button>
-                </div>
+              <div className="h-[400px]">
+                <Production3DSystem
+                  modelType="brain"
+                  title="Interactive Brain Model"
+                  showControls={true}
+                  autoRotate={true}
+                  interactive={true}
+                  showAnalysis={true}
+                  className="w-full h-full"
+                  onModelClick={(part) => {
+                    console.log('Brain part clicked:', part)
+                    // Handle brain part interaction
+                  }}
+                />
               </div>
             </CardContent>
           </Card>
