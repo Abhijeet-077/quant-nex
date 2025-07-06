@@ -5,18 +5,44 @@ import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import dynamic from "next/dynamic"
 
-// Lazy load 3D model
+// Lazy load 3D model with error handling
 const BrainModel = dynamic(() => import("@/components/3d/brain-model-enhanced"), {
   loading: () => (
-    <div className="w-full h-full flex items-center justify-center">
-      <div className="animate-pulse text-gray-400">Loading 3D Model...</div>
+    <div className="w-full h-full flex items-center justify-center bg-gray-900/50 rounded-xl border border-cyan-500/30">
+      <div className="text-center space-y-2">
+        <div className="w-8 h-8 border-2 border-cyan-500 border-t-transparent rounded-full animate-spin mx-auto"></div>
+        <p className="text-cyan-400 text-sm">Loading 3D Brain Model...</p>
+      </div>
     </div>
   ),
   ssr: false
 })
 
-export function LandingPageNew() {
+// Fallback component for when 3D model fails
+function BrainModelFallback() {
+  return (
+    <div className="w-full h-full flex items-center justify-center bg-gray-900/50 rounded-xl border border-cyan-500/30">
+      <div className="text-center space-y-4 p-8">
+        <div className="w-24 h-24 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-full mx-auto flex items-center justify-center">
+          <span className="text-3xl">🧠</span>
+        </div>
+        <div>
+          <h3 className="text-white font-semibold mb-2">Interactive Brain Model</h3>
+          <p className="text-gray-400 text-sm">Advanced 3D visualization with neural pathway mapping</p>
+        </div>
+        <div className="flex justify-center space-x-2">
+          <div className="w-2 h-2 bg-cyan-400 rounded-full animate-pulse"></div>
+          <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse" style={{ animationDelay: '0.2s' }}></div>
+          <div className="w-2 h-2 bg-purple-400 rounded-full animate-pulse" style={{ animationDelay: '0.4s' }}></div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export default function LandingPageNew() {
   const [activeTab, setActiveTab] = useState<"overview" | "features" | "demo">("overview")
+  const [modelError, setModelError] = useState(false)
 
   return (
     <div className="min-h-screen bg-black relative overflow-hidden">
@@ -112,13 +138,25 @@ export function LandingPageNew() {
               <span className="text-cyan-400">Quant</span>-NEX
             </h1>
           </motion.div>
-          
+
           <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
+            className="flex items-center space-x-4"
           >
-            <Button variant="outline" className="border-cyan-400 text-cyan-400">
+            <nav className="hidden md:flex items-center space-x-6">
+              <a href="/dashboard" className="text-gray-300 hover:text-cyan-400 transition-colors">Dashboard</a>
+              <a href="/diagnosis" className="text-gray-300 hover:text-cyan-400 transition-colors">Diagnosis</a>
+              <a href="/prognosis" className="text-gray-300 hover:text-cyan-400 transition-colors">Prognosis</a>
+              <a href="/treatment" className="text-gray-300 hover:text-cyan-400 transition-colors">Treatment</a>
+              <a href="/support" className="text-gray-300 hover:text-cyan-400 transition-colors">Support</a>
+            </nav>
+            <Button
+              variant="outline"
+              className="border-cyan-400 text-cyan-400 hover:bg-cyan-400 hover:text-black"
+              onClick={() => window.location.href = '/dashboard'}
+            >
               Get Started
             </Button>
           </motion.div>
@@ -157,11 +195,18 @@ export function LandingPageNew() {
               animate={{ opacity: 1 }}
               transition={{ duration: 0.7, delay: 0.5 }}
             >
-              <Button className="bg-cyan-600 hover:bg-cyan-500 px-6 py-3">
-                View Demo
+              <Button
+                className="bg-cyan-600 hover:bg-cyan-500 px-6 py-3"
+                onClick={() => window.location.href = '/dashboard'}
+              >
+                Enter Dashboard
               </Button>
-              <Button variant="outline" className="text-cyan-400 border-cyan-400">
-                Learn More
+              <Button
+                variant="outline"
+                className="text-cyan-400 border-cyan-400 hover:bg-cyan-400 hover:text-black"
+                onClick={() => window.location.href = '/3d-models'}
+              >
+                View 3D Models
               </Button>
             </motion.div>
           </motion.div>
@@ -173,7 +218,11 @@ export function LandingPageNew() {
             transition={{ duration: 0.7, delay: 0.2 }}
             className="h-96 lg:h-[500px] rounded-xl overflow-hidden border border-cyan-500/30"
           >
-            <BrainModel />
+            {modelError ? (
+              <BrainModelFallback />
+            ) : (
+              <BrainModel />
+            )}
           </motion.div>
         </main>
 
@@ -238,3 +287,6 @@ export function LandingPageNew() {
     </div>
   )
 }
+
+// Named export for compatibility
+export { LandingPageNew }
