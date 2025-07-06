@@ -21,6 +21,7 @@ function LandingPageLoading() {
 }
 
 export default function Home() {
+  // Deployment test - timestamp: 2025-01-06 18:15:00
   return (
     <ErrorBoundary
       fallback={<LandingPageFallback />}
