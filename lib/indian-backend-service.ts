@@ -103,10 +103,17 @@ class IndianBackendService {
     const user = DEMO_USERS.find((u) => u.email === credentials.email)
 
     if (user && (credentials.password === "demo123" || credentials.password === "password")) {
+      const token = `demo-token-${user.id}-${Date.now()}`
+
+      // Set cookie for middleware authentication
+      if (typeof document !== 'undefined') {
+        document.cookie = `quantnex-token=${token}; path=/; max-age=86400; SameSite=Lax`
+      }
+
       return {
         success: true,
         user,
-        token: `demo-token-${user.id}-${Date.now()}`,
+        token,
       }
     }
 
@@ -129,6 +136,13 @@ class IndianBackendService {
         // Demo Google sign-in
         await new Promise((resolve) => setTimeout(resolve, 1500))
 
+        const token = `google-demo-token-${Date.now()}`
+
+        // Set cookie for middleware authentication
+        if (typeof document !== 'undefined') {
+          document.cookie = `quantnex-token=${token}; path=/; max-age=86400; SameSite=Lax`
+        }
+
         return {
           success: true,
           user: {
@@ -139,7 +153,7 @@ class IndianBackendService {
             hospital: "Apollo Hospital",
             department: "Medical Imaging",
           },
-          token: `google-demo-token-${Date.now()}`,
+          token,
         }
       }
 

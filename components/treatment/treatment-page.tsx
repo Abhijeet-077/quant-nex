@@ -19,6 +19,9 @@ import {
   Edit,
 } from "lucide-react"
 import { EnhancedTreatmentRadar } from "@/components/visualization/enhanced-treatment-radar"
+import { TreatmentPlanningInterface } from "./treatment-planning-interface"
+import { MedicationManagementSystem } from "./medication-management-system"
+import { TreatmentProgressTracker } from "./treatment-progress-tracker"
 
 interface TreatmentPlan {
   id: string
@@ -48,6 +51,21 @@ export function TreatmentPage() {
   const [activeTab, setActiveTab] = useState("current")
   const [selectedTreatment, setSelectedTreatment] = useState<string | null>(null)
   const [isAddingTreatment, setIsAddingTreatment] = useState(false)
+
+  const handleExportPlan = () => {
+    const planData = {
+      treatments,
+      medications,
+      timestamp: new Date().toISOString(),
+    }
+    const blob = new Blob([JSON.stringify(planData, null, 2)], { type: 'application/json' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = 'treatment-plan.json'
+    a.click()
+    URL.revokeObjectURL(url)
+  }
 
   const [treatmentPlans, setTreatmentPlans] = useState<TreatmentPlan[]>([
     {
@@ -177,7 +195,7 @@ export function TreatmentPage() {
             <p className="text-gray-300 mt-2">Comprehensive treatment planning and progress tracking</p>
           </div>
           <div className="flex gap-2">
-            <Button variant="outline" className="glow-hover bg-transparent">
+            <Button variant="outline" className="glow-hover bg-transparent" onClick={handleExportPlan}>
               <Download className="h-4 w-4 mr-2" />
               Export Plan
             </Button>
@@ -189,23 +207,38 @@ export function TreatmentPage() {
         </div>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-2 md:grid-cols-3 lg:grid-cols-5 bg-teal-900/20">
-            <TabsTrigger value="current" className="data-[state=active]:bg-teal-600 text-xs sm:text-sm">
-              Current
+          <TabsList className="grid w-full grid-cols-2 md:grid-cols-3 lg:grid-cols-6 bg-teal-900/20">
+            <TabsTrigger value="planning" className="data-[state=active]:bg-teal-600 text-xs">
+              Planning
             </TabsTrigger>
-            <TabsTrigger value="medications" className="data-[state=active]:bg-teal-600 text-xs sm:text-sm">
+            <TabsTrigger value="progress" className="data-[state=active]:bg-teal-600 text-xs">
+              Progress
+            </TabsTrigger>
+            <TabsTrigger value="medications" className="data-[state=active]:bg-teal-600 text-xs">
               Medications
             </TabsTrigger>
-            <TabsTrigger value="schedule" className="data-[state=active]:bg-teal-600 text-xs sm:text-sm">
-              Schedule
+            <TabsTrigger value="current" className="data-[state=active]:bg-teal-600 text-xs">
+              Current Plans
             </TabsTrigger>
-            <TabsTrigger value="effectiveness" className="data-[state=active]:bg-teal-600 text-xs sm:text-sm">
+            <TabsTrigger value="effectiveness" className="data-[state=active]:bg-teal-600 text-xs">
               Effectiveness
             </TabsTrigger>
-            <TabsTrigger value="history" className="data-[state=active]:bg-teal-600 text-xs sm:text-sm">
+            <TabsTrigger value="history" className="data-[state=active]:bg-teal-600 text-xs">
               History
             </TabsTrigger>
           </TabsList>
+
+          <TabsContent value="planning" className="space-y-6">
+            <TreatmentPlanningInterface />
+          </TabsContent>
+
+          <TabsContent value="progress" className="space-y-6">
+            <TreatmentProgressTracker />
+          </TabsContent>
+
+          <TabsContent value="medications" className="space-y-6">
+            <MedicationManagementSystem />
+          </TabsContent>
 
           <TabsContent value="current" className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6">

@@ -2,13 +2,13 @@
 
 import { ProtectedRoute } from "@/components/auth/protected-route"
 import { NewMainLayout } from "@/components/layout/new-main-layout"
-import { ReportGenerationSystem } from "@/components/reports/report-generation-system"
+import { LifeAnalysisModule } from "@/components/analysis/life-analysis-module"
 
-export default function Reports() {
+export default function AnalysisPage() {
   return (
     <ProtectedRoute>
       <NewMainLayout>
-        <ReportGenerationSystem />
+        <LifeAnalysisModule />
       </NewMainLayout>
     </ProtectedRoute>
   )

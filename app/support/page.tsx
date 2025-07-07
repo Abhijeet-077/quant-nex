@@ -1,12 +1,15 @@
 "use client"
 
 import { SupportPage } from "@/components/support/support-page"
-import { MainLayout } from "@/components/layout/main-layout"
+import { NewMainLayout } from "@/components/layout/new-main-layout"
+import { ProtectedRoute } from "@/components/auth/protected-route"
 
 export default function Support() {
   return (
-    <MainLayout>
-      <SupportPage />
-    </MainLayout>
+    <ProtectedRoute>
+      <NewMainLayout>
+        <SupportPage />
+      </NewMainLayout>
+    </ProtectedRoute>
   )
 }

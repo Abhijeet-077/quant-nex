@@ -2,13 +2,13 @@
 
 import { ProtectedRoute } from "@/components/auth/protected-route"
 import { NewMainLayout } from "@/components/layout/new-main-layout"
-import { ReportGenerationSystem } from "@/components/reports/report-generation-system"
+import { DownloadManager } from "@/components/downloads/download-manager"
 
-export default function Reports() {
+export default function DownloadsPage() {
   return (
     <ProtectedRoute>
       <NewMainLayout>
-        <ReportGenerationSystem />
+        <DownloadManager />
       </NewMainLayout>
     </ProtectedRoute>
   )

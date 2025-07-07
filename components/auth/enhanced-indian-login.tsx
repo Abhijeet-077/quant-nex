@@ -87,7 +87,7 @@ export function EnhancedIndianLogin() {
         }
 
         // Update auth context
-        login(response.user)
+        login(response.user, response.token)
 
         // Redirect to intended page or dashboard
         setTimeout(() => {
@@ -124,7 +124,7 @@ export function EnhancedIndianLogin() {
         }
 
         // Update auth context
-        login(response.user)
+        login(response.user, response.token)
 
         // Redirect to intended page or dashboard
         setTimeout(() => {

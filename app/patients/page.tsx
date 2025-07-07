@@ -1,12 +1,15 @@
 "use client"
 
 import { PatientsPage } from "@/components/patients/patients-page"
-import { MainLayout } from "@/components/layout/main-layout"
+import { NewMainLayout } from "@/components/layout/new-main-layout"
+import { ProtectedRoute } from "@/components/auth/protected-route"
 
 export default function Patients() {
   return (
-    <MainLayout>
-      <PatientsPage />
-    </MainLayout>
+    <ProtectedRoute>
+      <NewMainLayout>
+        <PatientsPage />
+      </NewMainLayout>
+    </ProtectedRoute>
   )
 }

@@ -22,32 +22,33 @@ const publicRoutes = [
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
-  
+
   // Check if the current path is a protected route
-  const isProtectedRoute = protectedRoutes.some(route => 
+  const isProtectedRoute = protectedRoutes.some(route =>
     pathname.startsWith(route)
   )
-  
+
   // Check if the current path is a public route
   const isPublicRoute = publicRoutes.includes(pathname)
-  
+
   // Get authentication token from cookies or headers
   const token = request.cookies.get('quantnex-token')?.value ||
                 request.headers.get('authorization')?.replace('Bearer ', '')
-  
+
   // If accessing a protected route without authentication, redirect to login
   if (isProtectedRoute && !token) {
     const loginUrl = new URL('/login', request.url)
     loginUrl.searchParams.set('redirect', pathname)
     return NextResponse.redirect(loginUrl)
   }
-  
+
   // If accessing login page while authenticated, redirect to dashboard
   if (pathname === '/login' && token) {
-    return NextResponse.redirect(new URL('/dashboard', request.url))
+    const redirectUrl = request.nextUrl.searchParams.get('redirect') || '/dashboard'
+    return NextResponse.redirect(new URL(redirectUrl, request.url))
   }
-  
-  // Allow the request to continue
+
+  // Allow the request to continue for all other cases (including landing page)
   return NextResponse.next()
 }
 

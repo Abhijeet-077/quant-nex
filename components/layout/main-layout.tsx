@@ -31,8 +31,13 @@ import {
   X,
   Bell,
   Search,
+  Download,
+  User,
+  BarChart3,
+  TrendingUp,
 } from "lucide-react"
 import { useAuth } from "@/contexts/auth-context"
+import { BreadcrumbNavigation } from "@/components/navigation/breadcrumb-navigation"
 
 interface MainLayoutProps {
   children: React.ReactNode
@@ -48,9 +53,12 @@ export function MainLayout({ children }: MainLayoutProps) {
     { name: "Diagnosis", href: "/diagnosis", icon: Stethoscope, current: false },
     { name: "Prognosis", href: "/prognosis", icon: Activity, current: false },
     { name: "Treatment", href: "/treatment", icon: Syringe, current: false },
-    { name: "Monitoring", href: "/monitoring", icon: Activity, current: false },
+    { name: "Life Analysis", href: "/analysis", icon: TrendingUp, current: false },
+    { name: "Monitoring", href: "/monitoring", icon: BarChart3, current: false },
     { name: "Patients", href: "/patients", icon: Users, current: false },
     { name: "Reports", href: "/reports", icon: FileText, current: false },
+    { name: "Downloads", href: "/downloads", icon: Download, current: false },
+    { name: "Profile", href: "/profile", icon: User, current: false },
     { name: "Settings", href: "/settings", icon: Settings, current: false },
     { name: "Support", href: "/support", icon: HelpCircle, current: false },
   ]
@@ -170,7 +178,12 @@ export function MainLayout({ children }: MainLayoutProps) {
         </div>
 
         {/* Page content */}
-        <main className="flex-1">{children}</main>
+        <main className="min-h-screen bg-slate-900">
+          <div className="p-6">
+            <BreadcrumbNavigation />
+          </div>
+          {children}
+        </main>
       </div>
 
       {/* Mobile sidebar overlay */}

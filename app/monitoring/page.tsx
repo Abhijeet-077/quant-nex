@@ -1,12 +1,15 @@
 "use client"
 
 import { MonitoringPage } from "@/components/monitoring/monitoring-page"
-import { MainLayout } from "@/components/layout/main-layout"
+import { NewMainLayout } from "@/components/layout/new-main-layout"
+import { ProtectedRoute } from "@/components/auth/protected-route"
 
 export default function Monitoring() {
   return (
-    <MainLayout>
-      <MonitoringPage />
-    </MainLayout>
+    <ProtectedRoute>
+      <NewMainLayout>
+        <MonitoringPage />
+      </NewMainLayout>
+    </ProtectedRoute>
   )
 }

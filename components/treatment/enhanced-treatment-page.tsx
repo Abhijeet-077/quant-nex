@@ -46,11 +46,45 @@ export function EnhancedTreatmentPage() {
           <div className="col-span-12 flex justify-between items-center">
             <h1 className="text-3xl font-bold text-white">Advanced Treatment Planning</h1>
             <div className="flex space-x-2">
-              <Button variant="outline" size="sm" className="bg-white/10 border-white/20 text-white">
+              <Button
+                variant="outline"
+                size="sm"
+                className="bg-white/10 border-white/20 text-white"
+                onClick={() => {
+                  if (navigator.share) {
+                    navigator.share({
+                      title: 'Treatment Plan',
+                      text: 'Advanced treatment planning from QuantNex.ai',
+                      url: window.location.href,
+                    })
+                  } else {
+                    navigator.clipboard.writeText(window.location.href)
+                    alert('Plan link copied to clipboard!')
+                  }
+                }}
+              >
                 <Share2 className="h-4 w-4 mr-2" />
                 Share Plan
               </Button>
-              <Button variant="outline" size="sm" className="bg-white/10 border-white/20 text-white">
+              <Button
+                variant="outline"
+                size="sm"
+                className="bg-white/10 border-white/20 text-white"
+                onClick={() => {
+                  const planData = {
+                    treatmentParams,
+                    timestamp: new Date().toISOString(),
+                    optimized: isOptimized,
+                  }
+                  const blob = new Blob([JSON.stringify(planData, null, 2)], { type: 'application/json' })
+                  const url = URL.createObjectURL(blob)
+                  const a = document.createElement('a')
+                  a.href = url
+                  a.download = 'treatment-plan-dicom.json'
+                  a.click()
+                  URL.revokeObjectURL(url)
+                }}
+              >
                 <Download className="h-4 w-4 mr-2" />
                 Export DICOM
               </Button>

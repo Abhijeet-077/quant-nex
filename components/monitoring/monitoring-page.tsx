@@ -616,7 +616,22 @@ export function MonitoringPage() {
                     <p className="text-sm text-gray-300 mb-3">
                       Share live dashboard access with healthcare team members.
                     </p>
-                    <Button variant="outline" className="w-full glow-hover bg-transparent">
+                    <Button
+                      variant="outline"
+                      className="w-full glow-hover bg-transparent"
+                      onClick={() => {
+                        if (navigator.share) {
+                          navigator.share({
+                            title: 'QuantNex Monitoring Dashboard',
+                            text: 'Real-time patient monitoring dashboard',
+                            url: window.location.href,
+                          })
+                        } else {
+                          navigator.clipboard.writeText(window.location.href)
+                          alert('Dashboard link copied to clipboard!')
+                        }
+                      }}
+                    >
                       <Share2 className="h-4 w-4 mr-2" />
                       Share Access
                     </Button>

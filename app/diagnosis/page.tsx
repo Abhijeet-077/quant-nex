@@ -1,15 +1,15 @@
 "use client"
 
 import { DiagnosisPage } from "@/components/diagnosis/diagnosis-page"
-import { MainLayout } from "@/components/layout/main-layout"
+import { NewMainLayout } from "@/components/layout/new-main-layout"
 import { ProtectedRoute } from "@/components/auth/protected-route"
 
 export default function Diagnosis() {
   return (
     <ProtectedRoute>
-      <MainLayout>
+      <NewMainLayout>
         <DiagnosisPage />
-      </MainLayout>
+      </NewMainLayout>
     </ProtectedRoute>
   )
 }

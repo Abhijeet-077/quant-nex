@@ -64,13 +64,42 @@ export function SettingsPage() {
   }
 
   const exportSettings = () => {
-    // Export settings logic
-    console.log("Exporting settings...")
+    const settingsData = {
+      notifications: settings.notifications,
+      privacy: settings.privacy,
+      display: settings.display,
+      timestamp: new Date().toISOString(),
+    }
+    const blob = new Blob([JSON.stringify(settingsData, null, 2)], { type: 'application/json' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = 'quantnex-settings.json'
+    a.click()
+    URL.revokeObjectURL(url)
   }
 
   const importSettings = () => {
-    // Import settings logic
-    console.log("Importing settings...")
+    const input = document.createElement('input')
+    input.type = 'file'
+    input.accept = '.json'
+    input.onchange = (e) => {
+      const file = (e.target as HTMLInputElement).files?.[0]
+      if (file) {
+        const reader = new FileReader()
+        reader.onload = (e) => {
+          try {
+            const importedSettings = JSON.parse(e.target?.result as string)
+            setSettings(prev => ({ ...prev, ...importedSettings }))
+            alert('Settings imported successfully!')
+          } catch (error) {
+            alert('Error importing settings. Please check the file format.')
+          }
+        }
+        reader.readAsText(file)
+      }
+    }
+    input.click()
   }
 
   return (

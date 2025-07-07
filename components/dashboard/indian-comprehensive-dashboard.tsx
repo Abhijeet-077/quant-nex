@@ -30,6 +30,11 @@ import {
   LineChart,
 } from "lucide-react"
 import { Advanced4DBrainModel } from "../visualization/advanced-4d-brain-model"
+import { AdvancedBrain3D } from "../visualization/advanced-brain-3d"
+import { RealTimeMonitoringPanel } from "./real-time-monitoring-panel"
+import { EnhancedMedicalCharts } from "./widgets/enhanced-medical-charts"
+import { InteractivePatientFlow } from "./widgets/interactive-patient-flow"
+import { AdvancedBrainVisualization } from "./widgets/advanced-brain-visualization"
 
 interface IndianPatient {
   id: string
@@ -313,23 +318,30 @@ export function IndianComprehensiveDashboard() {
 
       {/* Main Content Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="grid w-full grid-cols-5 bg-teal-900/20">
-          <TabsTrigger value="overview" className="data-[state=active]:bg-teal-600">
+        <TabsList className="grid w-full grid-cols-2 md:grid-cols-3 lg:grid-cols-6 bg-teal-900/20">
+          <TabsTrigger value="overview" className="data-[state=active]:bg-teal-600 text-xs">
             Overview
           </TabsTrigger>
-          <TabsTrigger value="patients" className="data-[state=active]:bg-teal-600">
-            Patients
+          <TabsTrigger value="monitoring" className="data-[state=active]:bg-teal-600 text-xs">
+            Live Monitor
           </TabsTrigger>
-          <TabsTrigger value="visualization" className="data-[state=active]:bg-teal-600">
-            4D Models
+          <TabsTrigger value="patients" className="data-[state=active]:bg-teal-600 text-xs">
+            Patient Flow
           </TabsTrigger>
-          <TabsTrigger value="hospitals" className="data-[state=active]:bg-teal-600">
-            Hospitals
+          <TabsTrigger value="visualization" className="data-[state=active]:bg-teal-600 text-xs">
+            Brain 3D
           </TabsTrigger>
-          <TabsTrigger value="analytics" className="data-[state=active]:bg-teal-600">
+          <TabsTrigger value="analytics" className="data-[state=active]:bg-teal-600 text-xs">
             Analytics
           </TabsTrigger>
+          <TabsTrigger value="hospitals" className="data-[state=active]:bg-teal-600 text-xs">
+            Hospitals
+          </TabsTrigger>
         </TabsList>
+
+        <TabsContent value="monitoring" className="space-y-6">
+          <RealTimeMonitoringPanel />
+        </TabsContent>
 
         <TabsContent value="overview" className="space-y-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -398,6 +410,10 @@ export function IndianComprehensiveDashboard() {
         </TabsContent>
 
         <TabsContent value="patients" className="space-y-6">
+          <InteractivePatientFlow />
+        </TabsContent>
+
+        <TabsContent value="patients-old" className="space-y-6">
           {/* Search and Filter */}
           <Card className="card-glow">
             <CardContent className="p-4">
@@ -468,7 +484,7 @@ export function IndianComprehensiveDashboard() {
         </TabsContent>
 
         <TabsContent value="visualization" className="space-y-6">
-          <Advanced4DBrainModel />
+          <AdvancedBrain3D />
         </TabsContent>
 
         <TabsContent value="hospitals" className="space-y-6">
@@ -511,6 +527,80 @@ export function IndianComprehensiveDashboard() {
         </TabsContent>
 
         <TabsContent value="analytics" className="space-y-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+            <Card className="card-glow">
+              <CardHeader>
+                <CardTitle className="text-teal-400 flex items-center gap-2">
+                  <BarChart3 className="h-5 w-5" />
+                  Patient Analytics Overview
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <div className="flex justify-between items-center">
+                    <span className="text-gray-300">Total Patients</span>
+                    <span className="text-2xl font-bold text-teal-400">1,247</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-gray-300">Active Cases</span>
+                    <span className="text-2xl font-bold text-green-400">892</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-gray-300">Critical Cases</span>
+                    <span className="text-2xl font-bold text-red-400">23</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-gray-300">Success Rate</span>
+                    <span className="text-2xl font-bold text-blue-400">87.5%</span>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="card-glow">
+              <CardHeader>
+                <CardTitle className="text-teal-400 flex items-center gap-2">
+                  <PieChart className="h-5 w-5" />
+                  Treatment Distribution
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3">
+                  <div className="flex justify-between items-center">
+                    <span className="text-gray-300">Surgery</span>
+                    <div className="flex items-center gap-2">
+                      <div className="w-20 bg-slate-700 rounded-full h-2">
+                        <div className="bg-blue-500 h-2 rounded-full" style={{ width: '45%' }}></div>
+                      </div>
+                      <span className="text-white text-sm">45%</span>
+                    </div>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-gray-300">Chemotherapy</span>
+                    <div className="flex items-center gap-2">
+                      <div className="w-20 bg-slate-700 rounded-full h-2">
+                        <div className="bg-green-500 h-2 rounded-full" style={{ width: '30%' }}></div>
+                      </div>
+                      <span className="text-white text-sm">30%</span>
+                    </div>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-gray-300">Radiation</span>
+                    <div className="flex items-center gap-2">
+                      <div className="w-20 bg-slate-700 rounded-full h-2">
+                        <div className="bg-yellow-500 h-2 rounded-full" style={{ width: '25%' }}></div>
+                      </div>
+                      <span className="text-white text-sm">25%</span>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+          <EnhancedMedicalCharts />
+        </TabsContent>
+
+        <TabsContent value="analytics-old" className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <Card className="card-glow">
               <CardHeader>

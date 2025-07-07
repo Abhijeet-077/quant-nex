@@ -25,7 +25,7 @@ import { StatisticCounter } from "@/components/ui-effects/statistic-counter"
 import { TestimonialCarousel } from "@/components/landing/testimonial-carousel"
 import { FeatureShowcase } from "@/components/landing/feature-showcase"
 import { AIDemo } from "@/components/landing/ai-demo"
-import { CellStructure3D } from "@/components/visualization/3d-cell-structure"
+import { LandingBrain3D } from "@/components/visualization/landing-brain-3d"
 import { FullBodyNeuralNetwork3D } from "@/components/visualization/full-body-neural-network-3d"
 import Link from "next/link"
 
@@ -38,12 +38,14 @@ export function LandingPage() {
   const { isAuthenticated, isLoading } = useAuth()
 
   const handleNavigation = async (path: string) => {
+    console.log('Navigation clicked:', path)
     setIsNavigating(true)
     try {
-      await router.push(path)
+      // Add a small delay to show loading state
+      await new Promise(resolve => setTimeout(resolve, 300))
+      router.push(path)
     } catch (error) {
       console.error('Navigation error:', error)
-    } finally {
       setIsNavigating(false)
     }
   }
@@ -169,18 +171,18 @@ export function LandingPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
             <div className={`space-y-6 lg:space-y-8 ${isVisible ? "animate-slide-up" : "opacity-0"}`}>
-              <div className="space-y-4">
-                <Badge className="bg-teal-600/20 text-teal-400 border-teal-500/30 text-xs sm:text-sm">
+              <div className="space-y-4 lg:space-y-6">
+                <Badge className="bg-teal-600/20 text-teal-400 border-teal-500/30 text-xs sm:text-sm w-fit">
                   🚀 Next-Generation Medical AI
                 </Badge>
-                <h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold text-white leading-tight">
+                <h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold text-white leading-tight lg:leading-tight">
                   Revolutionizing
-                  <span className="block text-transparent bg-gradient-to-r from-teal-400 to-blue-400 bg-clip-text">
+                  <span className="block text-transparent bg-gradient-to-r from-teal-400 to-blue-400 bg-clip-text mt-2">
                     Brain Tumor
                   </span>
-                  Diagnosis
+                  <span className="block mt-2">Diagnosis</span>
                 </h1>
-                <p className="text-lg sm:text-xl text-gray-300 leading-relaxed max-w-2xl">
+                <p className="text-base sm:text-lg lg:text-xl text-gray-300 leading-relaxed max-w-xl lg:max-w-2xl">
                   Harness the power of AI to transform medical diagnosis, treatment planning, and patient care. Join
                   thousands of healthcare professionals using Quant-NEX to save lives.
                 </p>
@@ -226,7 +228,7 @@ export function LandingPage() {
               <div className="relative">
                 <div className="absolute inset-0 bg-gradient-to-r from-teal-400/20 to-blue-400/20 rounded-3xl blur-3xl"></div>
                 <div className="relative">
-                  <CellStructure3D />
+                  <LandingBrain3D />
                 </div>
               </div>
             </div>

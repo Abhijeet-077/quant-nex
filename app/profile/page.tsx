@@ -2,13 +2,13 @@
 
 import { ProtectedRoute } from "@/components/auth/protected-route"
 import { NewMainLayout } from "@/components/layout/new-main-layout"
-import { ReportGenerationSystem } from "@/components/reports/report-generation-system"
+import { ProfileManagement } from "@/components/profile/profile-management"
 
-export default function Reports() {
+export default function ProfilePage() {
   return (
     <ProtectedRoute>
       <NewMainLayout>
-        <ReportGenerationSystem />
+        <ProfileManagement />
       </NewMainLayout>
     </ProtectedRoute>
   )

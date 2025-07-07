@@ -1,12 +1,15 @@
 "use client"
 
 import { SettingsPage } from "@/components/settings/settings-page"
-import { MainLayout } from "@/components/layout/main-layout"
+import { NewMainLayout } from "@/components/layout/new-main-layout"
+import { ProtectedRoute } from "@/components/auth/protected-route"
 
 export default function Settings() {
   return (
-    <MainLayout>
-      <SettingsPage />
-    </MainLayout>
+    <ProtectedRoute>
+      <NewMainLayout>
+        <SettingsPage />
+      </NewMainLayout>
+    </ProtectedRoute>
   )
 }

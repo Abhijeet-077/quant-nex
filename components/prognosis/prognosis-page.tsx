@@ -20,6 +20,9 @@ import {
 } from "lucide-react"
 import { AdvancedSurvivalChart } from "@/components/visualization/advanced-survival-chart"
 import { EnhancedTreatmentRadar } from "@/components/visualization/enhanced-treatment-radar"
+import { AdvancedSurvivalAnalysis } from "./advanced-survival-analysis"
+import { RiskAssessmentDashboard } from "./risk-assessment-dashboard"
+import { TreatmentOutcomePredictor } from "./treatment-outcome-predictor"
 
 interface PrognosisData {
   condition: string
@@ -128,6 +131,34 @@ export function PrognosisPage() {
     return "default"
   }
 
+  const handleExportReport = () => {
+    const reportData = {
+      prognosisData,
+      patients,
+      timestamp: new Date().toISOString(),
+    }
+    const blob = new Blob([JSON.stringify(reportData, null, 2)], { type: 'application/json' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = 'prognosis-report.json'
+    a.click()
+    URL.revokeObjectURL(url)
+  }
+
+  const handleShareAnalysis = () => {
+    if (navigator.share) {
+      navigator.share({
+        title: 'Medical Prognosis Analysis',
+        text: 'Sharing prognosis analysis from QuantNex.ai',
+        url: window.location.href,
+      })
+    } else {
+      navigator.clipboard.writeText(window.location.href)
+      alert('Link copied to clipboard!')
+    }
+  }
+
   return (
     <div className="container-spacing space-y-6">
       <div className="max-w-7xl mx-auto space-y-6">
@@ -141,11 +172,11 @@ export function PrognosisPage() {
             <p className="text-gray-300 mt-2">AI-powered prognosis prediction and survival analysis</p>
           </div>
           <div className="flex gap-2">
-            <Button variant="outline" className="glow-hover bg-transparent">
+            <Button variant="outline" className="glow-hover bg-transparent" onClick={handleExportReport}>
               <Download className="h-4 w-4 mr-2" />
               Export Report
             </Button>
-            <Button variant="outline" className="glow-hover bg-transparent">
+            <Button variant="outline" className="glow-hover bg-transparent" onClick={handleShareAnalysis}>
               <Share2 className="h-4 w-4 mr-2" />
               Share Analysis
             </Button>
@@ -187,17 +218,20 @@ export function PrognosisPage() {
         </Card>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 bg-teal-900/20">
-            <TabsTrigger value="overview" className="data-[state=active]:bg-teal-600 text-xs sm:text-sm">
+          <TabsList className="grid w-full grid-cols-2 md:grid-cols-3 lg:grid-cols-6 bg-teal-900/20">
+            <TabsTrigger value="overview" className="data-[state=active]:bg-teal-600 text-xs">
               Overview
             </TabsTrigger>
-            <TabsTrigger value="survival" className="data-[state=active]:bg-teal-600 text-xs sm:text-sm">
-              Survival
+            <TabsTrigger value="survival" className="data-[state=active]:bg-teal-600 text-xs">
+              Survival Analysis
             </TabsTrigger>
-            <TabsTrigger value="treatment" className="data-[state=active]:bg-teal-600 text-xs sm:text-sm">
-              Treatment
+            <TabsTrigger value="risk" className="data-[state=active]:bg-teal-600 text-xs">
+              Risk Assessment
             </TabsTrigger>
-            <TabsTrigger value="monitoring" className="data-[state=active]:bg-teal-600 text-xs sm:text-sm">
+            <TabsTrigger value="prediction" className="data-[state=active]:bg-teal-600 text-xs">
+              Outcome Prediction
+            </TabsTrigger>
+            <TabsTrigger value="monitoring" className="data-[state=active]:bg-teal-600 text-xs">
               Monitoring
             </TabsTrigger>
           </TabsList>
@@ -320,6 +354,18 @@ export function PrognosisPage() {
           </TabsContent>
 
           <TabsContent value="survival" className="space-y-6">
+            <AdvancedSurvivalAnalysis />
+          </TabsContent>
+
+          <TabsContent value="risk" className="space-y-6">
+            <RiskAssessmentDashboard />
+          </TabsContent>
+
+          <TabsContent value="prediction" className="space-y-6">
+            <TreatmentOutcomePredictor />
+          </TabsContent>
+
+          <TabsContent value="survival-old" className="space-y-6">
             <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
               <AdvancedSurvivalChart />
               <Card className="card-glow">
@@ -388,54 +434,7 @@ export function PrognosisPage() {
             </div>
           </TabsContent>
 
-          <TabsContent value="treatment" className="space-y-6">
-            <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 lg:gap-6">
-              <div className="relative z-10">
-                <EnhancedTreatmentRadar />
-              </div>
 
-              <Card className="card-glow">
-                <CardHeader>
-                  <CardTitle className="text-teal-400">Treatment Options Comparison</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  {prognosisData.treatmentOptions.map((treatment, index) => (
-                    <div key={index} className="p-4 rounded-lg bg-teal-900/10 border border-teal-500/30">
-                      <div className="flex justify-between items-start mb-3">
-                        <h3 className="font-semibold text-white">{treatment.name}</h3>
-                        <Badge
-                          variant={
-                            treatment.effectiveness >= 70
-                              ? "default"
-                              : treatment.effectiveness >= 40
-                                ? "secondary"
-                                : "outline"
-                          }
-                        >
-                          {treatment.effectiveness}% Effective
-                        </Badge>
-                      </div>
-
-                      <div className="space-y-2">
-                        <div className="flex justify-between items-center">
-                          <span className="text-sm text-gray-300">Effectiveness</span>
-                          <div className="flex items-center gap-2">
-                            <Progress value={treatment.effectiveness} className="w-24 h-2" />
-                            <span className="text-sm text-white">{treatment.effectiveness}%</span>
-                          </div>
-                        </div>
-
-                        <div className="flex justify-between items-center">
-                          <span className="text-sm text-gray-300">Side Effects</span>
-                          <span className="text-sm text-gray-400">{treatment.sideEffects}</span>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </CardContent>
-              </Card>
-            </div>
-          </TabsContent>
 
           <TabsContent value="monitoring" className="space-y-6">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

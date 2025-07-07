@@ -1,15 +1,15 @@
 "use client"
 
 import { TreatmentPage } from "@/components/treatment/treatment-page"
-import { MainLayout } from "@/components/layout/main-layout"
+import { NewMainLayout } from "@/components/layout/new-main-layout"
 import { ProtectedRoute } from "@/components/auth/protected-route"
 
 export default function Treatment() {
   return (
     <ProtectedRoute>
-      <MainLayout>
+      <NewMainLayout>
         <TreatmentPage />
-      </MainLayout>
+      </NewMainLayout>
     </ProtectedRoute>
   )
 }
