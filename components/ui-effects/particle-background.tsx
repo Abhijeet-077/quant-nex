@@ -116,5 +116,5 @@ export function ParticleBackground() {
     return null
   }
 
-  return <canvas ref={canvasRef} className="absolute inset-0 z-0" style={{ background: "transparent" }} />
+  return <canvas ref={canvasRef} className="absolute inset-0 z-0" style={{ background: "transparent" }} suppressHydrationWarning />
 }

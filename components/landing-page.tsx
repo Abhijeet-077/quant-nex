@@ -115,7 +115,7 @@ export function LandingPage() {
   ]
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-teal-900 to-slate-900 relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-teal-900 to-slate-900 relative overflow-hidden" suppressHydrationWarning>
       <ParticleBackground />
 
       {/* Navigation */}
