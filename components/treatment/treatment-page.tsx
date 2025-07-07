@@ -165,7 +165,7 @@ export function TreatmentPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-teal-900 to-slate-900 p-6">
+    <div className="container-spacing space-y-6">
       <div className="max-w-7xl mx-auto space-y-6">
         {/* Header */}
         <div className="flex items-center justify-between">
@@ -189,26 +189,26 @@ export function TreatmentPage() {
         </div>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-5 bg-teal-900/20">
-            <TabsTrigger value="current" className="data-[state=active]:bg-teal-600">
-              Current Plan
+          <TabsList className="grid w-full grid-cols-2 md:grid-cols-3 lg:grid-cols-5 bg-teal-900/20">
+            <TabsTrigger value="current" className="data-[state=active]:bg-teal-600 text-xs sm:text-sm">
+              Current
             </TabsTrigger>
-            <TabsTrigger value="medications" className="data-[state=active]:bg-teal-600">
+            <TabsTrigger value="medications" className="data-[state=active]:bg-teal-600 text-xs sm:text-sm">
               Medications
             </TabsTrigger>
-            <TabsTrigger value="schedule" className="data-[state=active]:bg-teal-600">
+            <TabsTrigger value="schedule" className="data-[state=active]:bg-teal-600 text-xs sm:text-sm">
               Schedule
             </TabsTrigger>
-            <TabsTrigger value="effectiveness" className="data-[state=active]:bg-teal-600">
+            <TabsTrigger value="effectiveness" className="data-[state=active]:bg-teal-600 text-xs sm:text-sm">
               Effectiveness
             </TabsTrigger>
-            <TabsTrigger value="history" className="data-[state=active]:bg-teal-600">
+            <TabsTrigger value="history" className="data-[state=active]:bg-teal-600 text-xs sm:text-sm">
               History
             </TabsTrigger>
           </TabsList>
 
           <TabsContent value="current" className="space-y-6">
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6">
               {/* Treatment Plans */}
               <div className="lg:col-span-2 space-y-4">
                 <Card className="card-glow">
@@ -531,8 +531,10 @@ export function TreatmentPage() {
           </TabsContent>
 
           <TabsContent value="effectiveness" className="space-y-6">
-            <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
-              <EnhancedTreatmentRadar />
+            <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 lg:gap-6">
+              <div className="relative z-10">
+                <EnhancedTreatmentRadar />
+              </div>
 
               <Card className="card-glow">
                 <CardHeader>

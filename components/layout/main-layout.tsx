@@ -100,7 +100,7 @@ export function MainLayout({ children }: MainLayoutProps) {
           <div className="bg-teal-900/20 rounded-lg p-3">
             <div className="flex items-center gap-3">
               <Avatar className="h-8 w-8">
-                <AvatarImage src="/placeholder-avatar.jpg" />
+                <AvatarImage src="/placeholder-user.jpg" />
                 <AvatarFallback className="bg-teal-500 text-white">{user?.name?.charAt(0) || "U"}</AvatarFallback>
               </Avatar>
               <div className="flex-1 min-w-0">

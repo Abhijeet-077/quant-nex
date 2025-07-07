@@ -1,10 +1,16 @@
 import type React from "react"
-import type { Metadata } from "next"
+import type { Metadata, Viewport } from "next"
 import { Inter } from "next/font/google"
 import "./globals.css"
 import { AuthProvider } from "@/contexts/auth-context"
 
 const inter = Inter({ subsets: ["latin"] })
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  themeColor: '#0d9488',
+}
 
 export const metadata: Metadata = {
   title: "Quant-NEX - AI-Powered Medical Diagnosis Platform",
@@ -13,8 +19,8 @@ export const metadata: Metadata = {
   keywords:
     "AI medical diagnosis, brain tumor detection, healthcare technology, medical AI, patient monitoring, treatment planning",
   authors: [{ name: "Quant-NEX Team" }],
-  viewport: "width=device-width, initial-scale=1",
   robots: "index, follow",
+  metadataBase: new URL('https://quant-nex-git-master-abhijeetswami077gmailcoms-projects.vercel.app'),
   openGraph: {
     title: "Quant-NEX - AI-Powered Medical Diagnosis Platform",
     description:
@@ -50,7 +56,6 @@ export default function RootLayout({
       <head>
         <link rel="icon" href="/favicon.ico" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-        <meta name="theme-color" content="#0d9488" />
       </head>
       <body className={`${inter.className} antialiased`}>
         <AuthProvider>{children}</AuthProvider>

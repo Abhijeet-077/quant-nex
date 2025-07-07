@@ -282,9 +282,12 @@ export function DiagnosisPage() {
                         {uploadedImages.map((image, index) => (
                           <div key={index} className="relative">
                             <img
-                              src={image || "/placeholder.svg"}
+                              src={image || "/placeholder.svg?height=96&width=96"}
                               alt={`Medical scan ${index + 1}`}
                               className="w-full h-24 object-cover rounded-lg border border-teal-500/30"
+                              onError={(e) => {
+                                e.currentTarget.src = '/placeholder.svg?height=96&width=96'
+                              }}
                             />
                             <Badge className="absolute top-1 right-1 text-xs">Scan {index + 1}</Badge>
                           </div>

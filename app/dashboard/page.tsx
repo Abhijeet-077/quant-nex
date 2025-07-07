@@ -2,11 +2,14 @@
 
 import { IndianComprehensiveDashboard } from "@/components/dashboard/indian-comprehensive-dashboard"
 import { MainLayout } from "@/components/layout/main-layout"
+import { ProtectedRoute } from "@/components/auth/protected-route"
 
 export default function Dashboard() {
   return (
-    <MainLayout>
-      <IndianComprehensiveDashboard />
-    </MainLayout>
+    <ProtectedRoute>
+      <MainLayout>
+        <IndianComprehensiveDashboard />
+      </MainLayout>
+    </ProtectedRoute>
   )
 }

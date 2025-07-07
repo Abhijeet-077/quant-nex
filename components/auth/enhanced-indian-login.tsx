@@ -2,8 +2,8 @@
 
 import type React from "react"
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
+import { useState, useEffect } from "react"
+import { useRouter, useSearchParams } from "next/navigation"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -30,7 +30,8 @@ import { useAuth } from "@/contexts/auth-context"
 
 export function EnhancedIndianLogin() {
   const router = useRouter()
-  const { login } = useAuth()
+  const searchParams = useSearchParams()
+  const { login, isAuthenticated } = useAuth()
 
   const [formData, setFormData] = useState({
     email: "",
@@ -40,6 +41,16 @@ export function EnhancedIndianLogin() {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState("")
   const [success, setSuccess] = useState("")
+
+  // Get redirect URL from search params
+  const redirectUrl = searchParams.get('redirect') || '/dashboard'
+
+  // Redirect if already authenticated
+  useEffect(() => {
+    if (isAuthenticated) {
+      router.push(redirectUrl)
+    }
+  }, [isAuthenticated, router, redirectUrl])
 
   // Get demo credentials for display
   const demoCredentials = indianBackendService.getDemoCredentials()
@@ -78,9 +89,9 @@ export function EnhancedIndianLogin() {
         // Update auth context
         login(response.user)
 
-        // Redirect to dashboard
+        // Redirect to intended page or dashboard
         setTimeout(() => {
-          router.push("/dashboard")
+          router.push(redirectUrl)
         }, 1000)
       } else {
         setError(response.error || "Login failed. Please try again.")
@@ -115,9 +126,9 @@ export function EnhancedIndianLogin() {
         // Update auth context
         login(response.user)
 
-        // Redirect to dashboard
+        // Redirect to intended page or dashboard
         setTimeout(() => {
-          router.push("/dashboard")
+          router.push(redirectUrl)
         }, 1000)
       } else {
         setError(response.error || "Google sign-in failed. Please try again.")

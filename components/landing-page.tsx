@@ -1,6 +1,8 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { useRouter } from "next/navigation"
+import { useAuth } from "@/contexts/auth-context"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -30,14 +32,42 @@ import Link from "next/link"
 export function LandingPage() {
   const [currentFeature, setCurrentFeature] = useState(0)
   const [isVisible, setIsVisible] = useState(false)
+  const [mounted, setMounted] = useState(false)
+  const [isNavigating, setIsNavigating] = useState(false)
+  const router = useRouter()
+  const { isAuthenticated, isLoading } = useAuth()
+
+  const handleNavigation = async (path: string) => {
+    setIsNavigating(true)
+    try {
+      await router.push(path)
+    } catch (error) {
+      console.error('Navigation error:', error)
+    } finally {
+      setIsNavigating(false)
+    }
+  }
 
   useEffect(() => {
+    setMounted(true)
     setIsVisible(true)
     const interval = setInterval(() => {
       setCurrentFeature((prev) => (prev + 1) % 4)
     }, 5000)
     return () => clearInterval(interval)
   }, [])
+
+  // Redirect authenticated users to dashboard
+  useEffect(() => {
+    if (mounted && !isLoading && isAuthenticated) {
+      router.push('/dashboard')
+    }
+  }, [mounted, isLoading, isAuthenticated, router])
+
+  // Prevent hydration mismatch by not rendering until mounted
+  if (!mounted) {
+    return null
+  }
 
   const features = [
     {
@@ -112,16 +142,23 @@ export function LandingPage() {
               </a>
             </div>
             <div className="flex items-center gap-2 sm:gap-4">
-              <Link href="/login">
-                <Button variant="outline" size="sm" className="glow-hover bg-transparent text-xs sm:text-sm">
-                  Sign In
-                </Button>
-              </Link>
-              <Link href="/login">
-                <Button size="sm" className="btn-glow-primary text-xs sm:text-sm">
-                  Get Started
-                </Button>
-              </Link>
+              <Button
+                variant="outline"
+                size="sm"
+                className="glow-hover bg-transparent text-xs sm:text-sm"
+                onClick={() => handleNavigation('/login')}
+                disabled={isNavigating || isLoading}
+              >
+                {isNavigating ? 'Loading...' : 'Sign In'}
+              </Button>
+              <Button
+                size="sm"
+                className="btn-glow-primary text-xs sm:text-sm"
+                onClick={() => handleNavigation('/login')}
+                disabled={isNavigating || isLoading}
+              >
+                {isNavigating ? 'Loading...' : 'Get Started'}
+              </Button>
             </div>
           </div>
         </div>
@@ -150,19 +187,25 @@ export function LandingPage() {
               </div>
 
               <div className="flex flex-col sm:flex-row gap-4">
-                <Link href="/login">
-                  <Button
-                    size="lg"
-                    className="btn-glow-primary text-base sm:text-lg px-6 sm:px-8 py-4 sm:py-6 w-full sm:w-auto"
-                  >
-                    Start Free Trial
-                    <ArrowRight className="ml-2 h-4 w-4 sm:h-5 sm:w-5" />
-                  </Button>
-                </Link>
+                <Button
+                  size="lg"
+                  className="btn-glow-primary text-base sm:text-lg px-6 sm:px-8 py-4 sm:py-6 w-full sm:w-auto"
+                  onClick={() => handleNavigation('/login')}
+                  disabled={isNavigating || isLoading}
+                >
+                  {isNavigating ? 'Loading...' : 'Start Free Trial'}
+                  {!isNavigating && <ArrowRight className="ml-2 h-4 w-4 sm:h-5 sm:w-5" />}
+                </Button>
                 <Button
                   size="lg"
                   variant="outline"
                   className="glow-hover bg-transparent text-base sm:text-lg px-6 sm:px-8 py-4 sm:py-6 w-full sm:w-auto"
+                  onClick={() => {
+                    const demoSection = document.getElementById('demo')
+                    if (demoSection) {
+                      demoSection.scrollIntoView({ behavior: 'smooth' })
+                    }
+                  }}
                 >
                   <Play className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
                   Watch Demo
@@ -499,19 +542,25 @@ export function LandingPage() {
               streamline their workflow. Start your free trial today.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/login">
-                <Button
-                  size="lg"
-                  className="btn-glow-primary text-base sm:text-lg px-6 sm:px-8 py-4 sm:py-6 w-full sm:w-auto"
-                >
-                  Start Free Trial
-                  <ArrowRight className="ml-2 h-4 w-4 sm:h-5 sm:w-5" />
-                </Button>
-              </Link>
+              <Button
+                size="lg"
+                className="btn-glow-primary text-base sm:text-lg px-6 sm:px-8 py-4 sm:py-6 w-full sm:w-auto"
+                onClick={() => handleNavigation('/login')}
+                disabled={isNavigating || isLoading}
+              >
+                {isNavigating ? 'Loading...' : 'Start Free Trial'}
+                {!isNavigating && <ArrowRight className="ml-2 h-4 w-4 sm:h-5 sm:w-5" />}
+              </Button>
               <Button
                 size="lg"
                 variant="outline"
                 className="glow-hover bg-transparent text-base sm:text-lg px-6 sm:px-8 py-4 sm:py-6 w-full sm:w-auto"
+                onClick={() => {
+                  const demoSection = document.getElementById('demo')
+                  if (demoSection) {
+                    demoSection.scrollIntoView({ behavior: 'smooth' })
+                  }
+                }}
               >
                 Schedule Demo
               </Button>

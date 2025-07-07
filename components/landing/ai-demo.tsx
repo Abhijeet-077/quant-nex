@@ -29,7 +29,15 @@ export function AIDemo() {
   }
 
   const handleSampleSelect = (sample: string) => {
-    setSelectedImage(`/placeholder.svg?height=400&width=400`)
+    // Use actual medical images from the public/images directory
+    const sampleImages = [
+      '/images/brain-ct-scans.jpg',
+      '/images/brain-tumor-reference.png',
+      '/images/brain-medical-reference.jpg',
+      '/images/brain-reference.jpg'
+    ]
+    const imageIndex = parseInt(sample.split('-')[1]) - 1
+    setSelectedImage(sampleImages[imageIndex] || '/placeholder.svg?height=400&width=400')
   }
 
   const handleAnalyze = () => {
@@ -86,19 +94,27 @@ export function AIDemo() {
 
             <TabsContent value="samples" className="mt-0">
               <div className="grid grid-cols-2 gap-4">
-                {[1, 2, 3, 4].map((sample) => (
+                {[
+                  { id: 1, name: 'Brain CT Scan', image: '/images/brain-ct-scans.jpg' },
+                  { id: 2, name: 'Brain Tumor MRI', image: '/images/brain-tumor-reference.png' },
+                  { id: 3, name: 'Medical Reference', image: '/images/brain-medical-reference.jpg' },
+                  { id: 4, name: 'Brain Reference', image: '/images/brain-reference.jpg' }
+                ].map((sample) => (
                   <div
-                    key={sample}
+                    key={sample.id}
                     className="border border-gray-700 rounded-lg overflow-hidden cursor-pointer hover:border-purple-500 transition-colors"
-                    onClick={() => handleSampleSelect(`sample-${sample}`)}
+                    onClick={() => handleSampleSelect(`sample-${sample.id}`)}
                   >
                     <img
-                      src={`/placeholder.svg?height=150&width=150`}
-                      alt={`Sample ${sample}`}
-                      className="w-full h-auto"
+                      src={sample.image}
+                      alt={sample.name}
+                      className="w-full h-32 object-cover"
+                      onError={(e) => {
+                        e.currentTarget.src = '/placeholder.svg?height=150&width=150'
+                      }}
                     />
                     <div className="p-2 text-center">
-                      <p className="text-sm text-gray-300">Sample {sample}</p>
+                      <p className="text-sm text-gray-300">{sample.name}</p>
                     </div>
                   </div>
                 ))}

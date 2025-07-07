@@ -129,7 +129,7 @@ export function PrognosisPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-teal-900 to-slate-900 p-6">
+    <div className="container-spacing space-y-6">
       <div className="max-w-7xl mx-auto space-y-6">
         {/* Header */}
         <div className="flex items-center justify-between">
@@ -187,23 +187,23 @@ export function PrognosisPage() {
         </Card>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-4 bg-teal-900/20">
-            <TabsTrigger value="overview" className="data-[state=active]:bg-teal-600">
+          <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 bg-teal-900/20">
+            <TabsTrigger value="overview" className="data-[state=active]:bg-teal-600 text-xs sm:text-sm">
               Overview
             </TabsTrigger>
-            <TabsTrigger value="survival" className="data-[state=active]:bg-teal-600">
-              Survival Analysis
+            <TabsTrigger value="survival" className="data-[state=active]:bg-teal-600 text-xs sm:text-sm">
+              Survival
             </TabsTrigger>
-            <TabsTrigger value="treatment" className="data-[state=active]:bg-teal-600">
-              Treatment Options
+            <TabsTrigger value="treatment" className="data-[state=active]:bg-teal-600 text-xs sm:text-sm">
+              Treatment
             </TabsTrigger>
-            <TabsTrigger value="monitoring" className="data-[state=active]:bg-teal-600">
-              Monitoring Plan
+            <TabsTrigger value="monitoring" className="data-[state=active]:bg-teal-600 text-xs sm:text-sm">
+              Monitoring
             </TabsTrigger>
           </TabsList>
 
           <TabsContent value="overview" className="space-y-6">
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6">
               {/* Condition Summary */}
               <Card className="card-glow lg:col-span-2">
                 <CardHeader>
@@ -389,8 +389,10 @@ export function PrognosisPage() {
           </TabsContent>
 
           <TabsContent value="treatment" className="space-y-6">
-            <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
-              <EnhancedTreatmentRadar />
+            <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 lg:gap-6">
+              <div className="relative z-10">
+                <EnhancedTreatmentRadar />
+              </div>
 
               <Card className="card-glow">
                 <CardHeader>
