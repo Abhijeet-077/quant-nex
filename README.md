@@ -1,30 +1,59 @@
-# quant-nex
+# QuantNex.ai - AI-Powered Medical Diagnosis Platform
 
-*Automatically synced with your [v0.dev](https://v0.dev) deployments*
+*Advanced quantum-enhanced medical imaging and diagnosis system*
 
-[![Deployed on Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?style=for-the-badge&logo=vercel)](https://vercel.com/abhijeetswami077gmailcoms-projects/v0-project-details-review)
-[![Built with v0](https://img.shields.io/badge/Built%20with-v0.dev-black?style=for-the-badge)](https://v0.dev/chat/projects/EpYScnzIUYe)
+[![Deployed on Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?style=for-the-badge&logo=vercel)](https://quant-nex-git-master-abhijeetswami077gmailcoms-projects.vercel.app)
+[![Built with Next.js](https://img.shields.io/badge/Built%20with-Next.js-black?style=for-the-badge&logo=next.js)](https://nextjs.org)
 
 ## Overview
 
-This repository will stay in sync with your deployed chats on [v0.dev](https://v0.dev).
-Any changes you make to your deployed app will be automatically pushed to this repository from [v0.dev](https://v0.dev).
+QuantNex.ai is a cutting-edge medical diagnosis platform that leverages AI and quantum computing principles to provide accurate medical imaging analysis, patient monitoring, and treatment recommendations. This repository contains the full-stack Next.js application with integrated Firebase authentication and Neon database.
 
-## Deployment
+## 🚀 Live Deployment
 
 Your project is live at:
 
-**[https://vercel.com/abhijeetswami077gmailcoms-projects/v0-project-details-review](https://vercel.com/abhijeetswami077gmailcoms-projects/v0-project-details-review)**
+**[https://quant-nex-git-master-abhijeetswami077gmailcoms-projects.vercel.app](https://quant-nex-git-master-abhijeetswami077gmailcoms-projects.vercel.app)**
 
-## Build your app
+## 🛠️ Local Development Setup
 
-Continue building your app on:
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/Abhijeet-077/quant-nex.ai.git
+   cd quant-nex.ai
+   ```
 
-**[https://v0.dev/chat/projects/EpYScnzIUYe](https://v0.dev/chat/projects/EpYScnzIUYe)**
+2. **Install dependencies:**
+   ```bash
+   pnpm install
+   ```
 
-## How It Works
+3. **Set up environment variables:**
+   - Copy `.env.example` to `.env.local`
+   - Fill in your Firebase and Neon database credentials
 
-1. Create and modify your project using [v0.dev](https://v0.dev)
-2. Deploy your chats from the v0 interface
-3. Changes are automatically pushed to this repository
-4. Vercel deploys the latest version from this repository
+4. **Run the development server:**
+   ```bash
+   pnpm dev
+   ```
+
+5. **Open your browser:**
+   Navigate to [http://localhost:3000](http://localhost:3000)
+
+## 🔄 Automatic Deployment Workflow
+
+This project is configured for automatic deployment:
+
+1. Make changes locally and test them
+2. Commit and push changes to GitHub
+3. Vercel automatically detects changes and deploys
+4. Your live site updates within minutes
+
+## 🏗️ Tech Stack
+
+- **Frontend:** Next.js 15, React 19, TypeScript
+- **Styling:** Tailwind CSS, Radix UI Components
+- **Authentication:** Firebase Auth
+- **Database:** Neon PostgreSQL
+- **Deployment:** Vercel
+- **Package Manager:** pnpm
