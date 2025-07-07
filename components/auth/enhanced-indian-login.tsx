@@ -344,6 +344,19 @@ export function EnhancedIndianLogin() {
           </Card>
         )}
 
+        {/* Register Link */}
+        <div className="text-center">
+          <p className="text-sm text-gray-400">
+            Don't have an account?{" "}
+            <button
+              onClick={() => router.push('/register')}
+              className="text-teal-400 hover:text-teal-300 font-medium transition-colors"
+            >
+              Sign up here
+            </button>
+          </p>
+        </div>
+
         {/* Features */}
         <div className="grid grid-cols-3 gap-4 text-center">
           <div className="space-y-2">

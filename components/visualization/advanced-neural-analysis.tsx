@@ -1,15 +1,12 @@
 "use client"
 
 import { useRef, useState, Suspense, useCallback } from "react"
-import { Canvas, useFrame } from "@react-three/fiber"
-import { OrbitControls, Environment, Html } from "@react-three/drei"
 import { Button } from "@/components/ui/button"
 import { Slider } from "@/components/ui/slider"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
 import { Brain, Eye, EyeOff, Zap, Target, Activity, Layers, RotateCcw, Play, Pause, Settings } from "lucide-react"
-import * as THREE from "three"
 
 interface AnalysisData {
   tumorVolume: number
@@ -228,48 +225,24 @@ export function AdvancedNeuralAnalysis() {
         </Card>
       </div>
 
-      {/* 3D Canvas */}
-      <div className="w-full h-full">
-        <Canvas
-          camera={{ position: [0, 0, 5], fov: 50 }}
-          gl={{
-            antialias: true,
-            alpha: true,
-            powerPreference: "high-performance",
-            stencil: false,
-            depth: true,
-            logarithmicDepthBuffer: true,
-          }}
-          shadows="soft"
-          dpr={[1, 2]}
-        >
-          <Suspense fallback={null}>
-            <ProfessionalLighting />
-            <Environment preset="studio" />
-            <MedicalBrainModel
-              brainOpacity={brainOpacity}
-              tumorOpacity={tumorOpacity}
-              showLabels={showLabels}
-              isAnimating={isAnimating}
-              viewMode={viewMode}
-              dosePoints={dosePoints}
-              organsAtRisk={organsAtRisk}
-              onRegionSelect={setSelectedRegion}
-            />
-            <OrbitControls
-              enablePan={true}
-              enableZoom={true}
-              enableRotate={true}
-              autoRotate={false}
-              minDistance={3}
-              maxDistance={10}
-              enableDamping
-              dampingFactor={0.05}
-              maxPolarAngle={Math.PI}
-              minPolarAngle={0}
-            />
-          </Suspense>
-        </Canvas>
+      {/* 3D Visualization Placeholder */}
+      <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-slate-800 to-slate-900 rounded-lg">
+        <div className="text-center space-y-4">
+          <div className="w-32 h-32 mx-auto bg-gradient-to-br from-cyan-500/20 to-blue-500/20 rounded-full flex items-center justify-center">
+            <Brain className="h-16 w-16 text-cyan-400" />
+          </div>
+          <div>
+            <h3 className="text-xl font-semibold text-cyan-400 mb-2">Advanced Neural Analysis</h3>
+            <p className="text-slate-300 text-sm max-w-md">
+              3D brain visualization with tumor mapping, dose distribution, and organ risk assessment.
+            </p>
+            <div className="mt-4 space-y-2">
+              <div className="text-xs text-slate-400">Current Mode: {viewMode}</div>
+              <div className="text-xs text-slate-400">Brain Opacity: {Math.round(brainOpacity * 100)}%</div>
+              <div className="text-xs text-slate-400">Tumor Opacity: {Math.round(tumorOpacity * 100)}%</div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   )

@@ -21,7 +21,7 @@ const testimonials: Testimonial[] = [
     institution: "Memorial Cancer Institute",
     quote:
       "Quant-NEX has revolutionized how we approach treatment planning. The quantum-enhanced algorithms have improved our radiation therapy outcomes by 32%.",
-    image: "/placeholder.svg?height=80&width=80",
+    image: "/placeholder-user.jpg",
   },
   {
     id: 2,
@@ -30,7 +30,7 @@ const testimonials: Testimonial[] = [
     institution: "National Cancer Research Center",
     quote:
       "The 3D visualization capabilities allow us to see tumors in ways we never could before. It's changing how we understand cancer progression.",
-    image: "/placeholder.svg?height=80&width=80",
+    image: "/placeholder-user.jpg",
   },
   {
     id: 3,
@@ -39,7 +39,7 @@ const testimonials: Testimonial[] = [
     institution: "University Medical Center",
     quote:
       "The AI-powered insights have helped us catch subtle patterns that would have been missed. It's like having a brilliant colleague who never gets tired.",
-    image: "/placeholder.svg?height=80&width=80",
+    image: "/placeholder-user.jpg",
   },
 ]
 

@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 import { useTheme } from "next-themes"
 
 interface Particle {
@@ -15,8 +15,15 @@ interface Particle {
 export function ParticleBackground() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const { theme } = useTheme()
+  const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  useEffect(() => {
+    if (!mounted) return
+
     const canvas = canvasRef.current
     if (!canvas) return
 
@@ -103,7 +110,11 @@ export function ParticleBackground() {
     return () => {
       window.removeEventListener("resize", resizeCanvas)
     }
-  }, [theme])
+  }, [theme, mounted])
+
+  if (!mounted) {
+    return null
+  }
 
   return <canvas ref={canvasRef} className="absolute inset-0 z-0" style={{ background: "transparent" }} />
 }

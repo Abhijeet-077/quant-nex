@@ -47,6 +47,7 @@ export function PatientsPage() {
   const [searchTerm, setSearchTerm] = useState("")
   const [filterStatus, setFilterStatus] = useState("all")
   const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null)
+  const [isAddingPatient, setIsAddingPatient] = useState(false)
 
   const [patients] = useState<Patient[]>([
     {
@@ -236,7 +237,7 @@ export function PatientsPage() {
               <Filter className="h-4 w-4 mr-2" />
               Advanced Filter
             </Button>
-            <Button className="btn-glow-primary">
+            <Button className="btn-glow-primary" onClick={() => setIsAddingPatient(true)}>
               <Plus className="h-4 w-4 mr-2" />
               Add Patient
             </Button>
@@ -601,6 +602,50 @@ export function PatientsPage() {
             </Card>
           </TabsContent>
         </Tabs>
+
+        {/* Add Patient Dialog */}
+        {isAddingPatient && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+            <Card className="w-full max-w-md mx-4 card-glow">
+              <CardHeader>
+                <CardTitle className="text-teal-400">Add New Patient</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div>
+                  <label className="text-sm font-medium text-gray-300">Full Name</label>
+                  <Input placeholder="Enter patient name" className="bg-teal-900/20 border-teal-500/30" />
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-gray-300">Age</label>
+                  <Input type="number" placeholder="Enter age" className="bg-teal-900/20 border-teal-500/30" />
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-gray-300">Condition</label>
+                  <Input placeholder="Enter medical condition" className="bg-teal-900/20 border-teal-500/30" />
+                </div>
+                <div className="flex gap-2 pt-4">
+                  <Button
+                    variant="outline"
+                    className="flex-1 glow-hover bg-transparent"
+                    onClick={() => setIsAddingPatient(false)}
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    className="flex-1 btn-glow-primary"
+                    onClick={() => {
+                      // Add patient logic here
+                      alert("Patient added successfully!")
+                      setIsAddingPatient(false)
+                    }}
+                  >
+                    Add Patient
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        )}
       </div>
     </div>
   )

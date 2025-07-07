@@ -2,111 +2,152 @@
 
 import type React from "react"
 
-import { useState } from "react"
 import { motion } from "framer-motion"
 import { BrainCircuit, Dna, FlaskConical, Microscope, Syringe, Users } from "lucide-react"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
-interface Feature {
-  id: string
-  icon: React.ReactNode
-  title: string
-  description: string
-  image: string
+interface FeatureShowcaseProps {
+  currentFeature: number
 }
 
-const features: Feature[] = [
-  {
-    id: "ai-detection",
-    icon: <BrainCircuit className="h-6 w-6" />,
-    title: "AI-Powered Detection",
-    description:
-      "Our advanced neural networks can detect and classify cancer with unprecedented accuracy. The system continuously learns from new data, improving its performance over time.",
-    image: "/placeholder.svg?height=300&width=500",
-  },
-  {
-    id: "genomic-analysis",
-    icon: <Dna className="h-6 w-6" />,
-    title: "Genomic Analysis",
-    description:
-      "Comprehensive genomic profiling helps identify targeted treatment options based on the specific genetic mutations present in the tumor.",
-    image: "/placeholder.svg?height=300&width=500",
-  },
-  {
-    id: "3d-visualization",
-    icon: <Microscope className="h-6 w-6" />,
-    title: "3D Visualization",
-    description:
-      "Interactive 3D models of tumors allow doctors to better understand the spatial characteristics and plan interventions with greater precision.",
-    image: "/placeholder.svg?height=300&width=500",
-  },
-  {
-    id: "quantum-optimization",
-    icon: <FlaskConical className="h-6 w-6" />,
-    title: "Quantum Optimization",
-    description:
-      "Quantum-enhanced algorithms optimize treatment planning by exploring vast solution spaces that would be impossible with classical computing.",
-    image: "/placeholder.svg?height=300&width=500",
-  },
-  {
-    id: "treatment-simulation",
-    icon: <Syringe className="h-6 w-6" />,
-    title: "Treatment Simulation",
-    description:
-      "Simulate treatment outcomes before implementation to identify the most effective approach for each patient's unique case.",
-    image: "/placeholder.svg?height=300&width=500",
-  },
-  {
-    id: "collaborative-platform",
-    icon: <Users className="h-6 w-6" />,
-    title: "Collaborative Platform",
-    description:
-      "Enable seamless collaboration between oncologists, radiologists, and researchers to provide the best possible care for patients.",
-    image: "/placeholder.svg?height=300&width=500",
-  },
-]
+export function FeatureShowcase({ currentFeature }: FeatureShowcaseProps) {
+  const features = [
+    {
+      title: "AI-Powered Detection",
+      description: "Advanced neural networks detect and classify cancer with unprecedented accuracy",
+      icon: BrainCircuit,
+      color: "text-teal-400",
+      bgColor: "bg-teal-500/20"
+    },
+    {
+      title: "Genomic Analysis",
+      description: "Comprehensive genomic profiling for targeted treatment options",
+      icon: Dna,
+      color: "text-blue-400",
+      bgColor: "bg-blue-500/20"
+    },
+    {
+      title: "3D Visualization",
+      description: "Interactive 3D models for precise intervention planning",
+      icon: Microscope,
+      color: "text-purple-400",
+      bgColor: "bg-purple-500/20"
+    },
+    {
+      title: "Quantum Optimization",
+      description: "Quantum-enhanced algorithms for treatment optimization",
+      icon: FlaskConical,
+      color: "text-cyan-400",
+      bgColor: "bg-cyan-500/20"
+    }
+  ]
 
-export function FeatureShowcase() {
-  const [activeFeature, setActiveFeature] = useState(features[0].id)
+  const currentFeatureData = features[currentFeature] || features[0]
+  const IconComponent = currentFeatureData.icon
 
   return (
-    <Tabs defaultValue={features[0].id} onValueChange={setActiveFeature} className="w-full">
-      <TabsList className="grid grid-cols-3 md:grid-cols-6 bg-black/20 p-1">
-        {features.map((feature) => (
-          <TabsTrigger
-            key={feature.id}
-            value={feature.id}
-            className="data-[state=active]:bg-purple-900/50 data-[state=active]:text-white"
-          >
-            <div className="flex flex-col items-center p-2">
-              {feature.icon}
-              <span className="mt-1 text-xs hidden md:block">{feature.title}</span>
-            </div>
-          </TabsTrigger>
-        ))}
-      </TabsList>
+    <div className="relative">
+      <motion.div
+        key={currentFeature}
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.5 }}
+        className="bg-gradient-to-br from-slate-900/90 to-teal-900/90 backdrop-blur-xl border border-teal-500/30 rounded-2xl p-8 lg:p-12"
+      >
+        {/* Feature Icon */}
+        <div className={`w-16 h-16 lg:w-20 lg:h-20 ${currentFeatureData.bgColor} rounded-2xl flex items-center justify-center mb-6`}>
+          <IconComponent className={`h-8 w-8 lg:h-10 lg:w-10 ${currentFeatureData.color}`} />
+        </div>
 
-      {features.map((feature) => (
-        <TabsContent key={feature.id} value={feature.id} className="mt-6">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="grid md:grid-cols-2 gap-8 items-center"
-          >
-            <div>
-              <h3 className="text-2xl font-bold mb-4 text-white flex items-center">
-                {feature.icon}
-                <span className="ml-2">{feature.title}</span>
-              </h3>
-              <p className="text-gray-300">{feature.description}</p>
+        {/* Feature Content */}
+        <div className="space-y-4">
+          <h3 className="text-2xl lg:text-3xl font-bold text-white">
+            {currentFeatureData.title}
+          </h3>
+          <p className="text-lg text-gray-300 leading-relaxed">
+            {currentFeatureData.description}
+          </p>
+        </div>
+
+        {/* Visual Representation */}
+        <div className="mt-8">
+          <div className="relative h-48 lg:h-64 bg-gradient-to-br from-slate-800 to-slate-900 rounded-xl overflow-hidden">
+            <div className="absolute inset-0 flex items-center justify-center">
+              {/* Dynamic Visual Based on Feature */}
+              {currentFeature === 0 && (
+                <div className="grid grid-cols-3 gap-4">
+                  {[...Array(9)].map((_, i) => (
+                    <motion.div
+                      key={i}
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      transition={{ delay: i * 0.1 }}
+                      className={`w-8 h-8 rounded-full ${i % 3 === 0 ? 'bg-teal-400' : i % 3 === 1 ? 'bg-blue-400' : 'bg-purple-400'}`}
+                    />
+                  ))}
+                </div>
+              )}
+
+              {currentFeature === 1 && (
+                <div className="flex items-center space-x-2">
+                  {[...Array(6)].map((_, i) => (
+                    <motion.div
+                      key={i}
+                      initial={{ height: 0 }}
+                      animate={{ height: Math.random() * 100 + 50 }}
+                      transition={{ delay: i * 0.2 }}
+                      className="w-4 bg-gradient-to-t from-blue-600 to-blue-400 rounded-t"
+                    />
+                  ))}
+                </div>
+              )}
+
+              {currentFeature === 2 && (
+                <motion.div
+                  animate={{ rotateY: 360 }}
+                  transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+                  className="w-24 h-24 bg-gradient-to-br from-purple-500 to-pink-500 rounded-lg"
+                />
+              )}
+
+              {currentFeature === 3 && (
+                <div className="relative">
+                  {[...Array(5)].map((_, i) => (
+                    <motion.div
+                      key={i}
+                      animate={{
+                        scale: [1, 1.2, 1],
+                        opacity: [0.5, 1, 0.5]
+                      }}
+                      transition={{
+                        duration: 2,
+                        repeat: Infinity,
+                        delay: i * 0.4
+                      }}
+                      className="absolute w-16 h-16 border-2 border-cyan-400 rounded-full"
+                      style={{
+                        left: `${i * 20}px`,
+                        top: `${Math.sin(i) * 20}px`
+                      }}
+                    />
+                  ))}
+                </div>
+              )}
             </div>
-            <div className="bg-black/30 backdrop-blur-sm border border-purple-900/30 rounded-xl overflow-hidden">
-              <img src={feature.image || "/placeholder.svg"} alt={feature.title} className="w-full h-auto" />
-            </div>
-          </motion.div>
-        </TabsContent>
-      ))}
-    </Tabs>
+          </div>
+        </div>
+
+        {/* Progress Indicator */}
+        <div className="flex justify-center mt-6 space-x-2">
+          {features.map((_, index) => (
+            <div
+              key={index}
+              className={`w-2 h-2 rounded-full transition-colors ${
+                index === currentFeature ? 'bg-teal-400' : 'bg-gray-600'
+              }`}
+            />
+          ))}
+        </div>
+      </motion.div>
+    </div>
   )
 }

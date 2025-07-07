@@ -27,7 +27,7 @@ import { FeatureShowcase } from "@/components/landing/feature-showcase"
 import { AIDemo } from "@/components/landing/ai-demo"
 import { LandingBrain3D } from "@/components/visualization/landing-brain-3d"
 import { FullBodyNeuralNetwork3D } from "@/components/visualization/full-body-neural-network-3d"
-import Link from "next/link"
+import { CellStructure3D } from "@/components/visualization/3d-cell-structure"
 
 export function LandingPage() {
   const [currentFeature, setCurrentFeature] = useState(0)
@@ -281,12 +281,12 @@ export function LandingPage() {
                   onClick={() => setCurrentFeature(index)}
                 >
                   <div className="flex items-start gap-4">
-                    <div className={`p-3 rounded-lg bg-gradient-to-r from-teal-500/20 to-blue-500/20`}>
+                    <div className={`p-3 rounded-lg bg-gradient-to-r from-teal-500/20 to-blue-500/20 flex-shrink-0`}>
                       <feature.icon className={`h-5 w-5 lg:h-6 lg:w-6 ${feature.color}`} />
                     </div>
-                    <div>
-                      <h3 className="text-lg lg:text-xl font-semibold text-white mb-2">{feature.title}</h3>
-                      <p className="text-sm lg:text-base text-gray-300">{feature.description}</p>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="text-lg lg:text-xl font-semibold text-white mb-2 leading-tight">{feature.title}</h3>
+                      <p className="text-sm lg:text-base text-gray-300 leading-relaxed">{feature.description}</p>
                     </div>
                   </div>
                 </div>
