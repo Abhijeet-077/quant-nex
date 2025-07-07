@@ -447,7 +447,13 @@ export function LandingPage() {
                     <span className="text-sm lg:text-base text-gray-300">Email support</span>
                   </li>
                 </ul>
-                <Button className="w-full btn-glow-primary">Start Free Trial</Button>
+                <Button
+                  className="w-full btn-glow-primary"
+                  onClick={() => handleNavigation('/login')}
+                  disabled={isNavigating || isLoading}
+                >
+                  {isNavigating ? 'Loading...' : 'Start Free Trial'}
+                </Button>
               </CardContent>
             </Card>
 
@@ -485,7 +491,13 @@ export function LandingPage() {
                     <span className="text-sm lg:text-base text-gray-300">API access</span>
                   </li>
                 </ul>
-                <Button className="w-full btn-glow-primary">Start Free Trial</Button>
+                <Button
+                  className="w-full btn-glow-primary"
+                  onClick={() => handleNavigation('/login')}
+                  disabled={isNavigating || isLoading}
+                >
+                  {isNavigating ? 'Loading...' : 'Start Free Trial'}
+                </Button>
               </CardContent>
             </Card>
 
