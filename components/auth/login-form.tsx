@@ -15,10 +15,11 @@ import { Fingerprint, KeyRound, Loader2, LogIn, Mail, ShieldCheck, User } from "
 import { ParticleBackground } from "../ui-effects/particle-background"
 import { useAuth } from "@/contexts/auth-context"
 import { useToast } from "@/components/ui/use-toast"
+import { indianBackendService } from "@/lib/indian-backend-service"
 
 export function LoginForm() {
   const router = useRouter()
-  const { login, register } = useAuth()
+  const { login } = useAuth()
   const { toast } = useToast()
   const [isLoading, setIsLoading] = useState(false)
   const [activeTab, setActiveTab] = useState("login")
@@ -41,9 +42,10 @@ export function LoginForm() {
     setIsLoading(true)
 
     try {
-      const user = await login(loginEmail, loginPassword)
+      const response = await indianBackendService.login({ email: loginEmail, password: loginPassword })
 
-      if (user) {
+      if (response.success && response.user) {
+        login(response.user, response.token)
         toast({
           title: "Login successful",
           description: "Welcome back to Quant-NEX!",
@@ -52,7 +54,7 @@ export function LoginForm() {
       } else {
         toast({
           title: "Login failed",
-          description: "Invalid email or password. Please try again.",
+          description: response.error || "Invalid credentials. Please try again.",
           variant: "destructive",
         })
         setIsLoading(false)
@@ -101,22 +103,13 @@ export function LoginForm() {
         role,
       }
 
-      const user = await register(registerEmail, registerPassword, userData)
-
-      if (user) {
-        toast({
-          title: "Registration successful",
-          description: "Your account has been created. Welcome to Quant-NEX!",
-        })
-        router.push("/dashboard")
-      } else {
-        toast({
-          title: "Registration failed",
-          description: "An error occurred during registration. Please try again.",
-          variant: "destructive",
-        })
-        setIsLoading(false)
-      }
+      // For now, just show a message that registration is not implemented
+      toast({
+        title: "Registration not available",
+        description: "Please contact your administrator to create an account.",
+        variant: "destructive",
+      })
+      setIsLoading(false)
     } catch (error) {
       console.error("Registration error:", error)
       toast({

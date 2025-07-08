@@ -2,10 +2,7 @@
 
 import { useState } from "react"
 import { MainLayout } from "../layout/main-layout"
-import { DragDropLayout } from "./drag-drop-layout"
-import { Enhanced3DTumor } from "./widgets/enhanced-3d-tumor"
 import { InteractiveSurvivalCurves } from "./widgets/interactive-survival-curves"
-import { EnhancedTreatmentRadar } from "../visualization/enhanced-treatment-radar"
 import { AIInsightsPanel } from "../ai/ai-insights-panel"
 import { LivePatientJourney } from "../visualization/live-patient-journey"
 import { Button } from "@/components/ui/button"
@@ -88,26 +85,10 @@ export function CustomizableDashboard() {
   // Define all available widgets
   const availableWidgets = [
     {
-      id: "3d-tumor-viz",
-      title: "3D Tumor Visualization",
-      component: Enhanced3DTumor,
-      size: "xlarge" as const,
-      category: "visualization",
-      isVisible: true,
-    },
-    {
       id: "survival-curves",
       title: "Interactive Survival Analysis",
       component: InteractiveSurvivalCurves,
       size: "large" as const,
-      category: "analytics",
-      isVisible: true,
-    },
-    {
-      id: "treatment-radar",
-      title: "Treatment Efficacy Radar",
-      component: EnhancedTreatmentRadar,
-      size: "medium" as const,
       category: "analytics",
       isVisible: true,
     },
@@ -188,14 +169,20 @@ export function CustomizableDashboard() {
           </div>
         </div>
 
-        {/* Drag & Drop Dashboard */}
-        <DragDropLayout
-          availableWidgets={availableWidgets}
-          onLayoutChange={(layout) => {
-            console.log("Layout changed:", layout)
-            // Save to localStorage or backend
-          }}
-        />
+        {/* Dashboard Content */}
+        <div className="p-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {availableWidgets.map((widget) => {
+              const Component = widget.component
+              return (
+                <div key={widget.id} className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-lg p-6">
+                  <h3 className="text-xl font-semibold text-white mb-4">{widget.title}</h3>
+                  <Component />
+                </div>
+              )
+            })}
+          </div>
+        </div>
       </div>
     </MainLayout>
   )

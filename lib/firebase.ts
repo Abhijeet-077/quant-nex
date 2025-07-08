@@ -17,9 +17,9 @@ const firebaseConfig = {
 
 // Initialize Firebase
 let app
-let db
-let auth
-let storage
+let db: any
+let auth: any
+let storage: any
 
 // Check if we're in a browser environment before initializing Firebase
 if (typeof window !== "undefined") {

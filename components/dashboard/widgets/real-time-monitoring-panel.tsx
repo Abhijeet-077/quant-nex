@@ -9,7 +9,7 @@ import {
   Activity,
   Heart,
   Brain,
-  Pulse,
+  Activity as Pulse,
   AlertTriangle,
   TrendingUp,
   TrendingDown,

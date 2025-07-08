@@ -47,6 +47,8 @@ export function SettingsPage() {
     backupFrequency: "daily",
     dataRetention: "365",
     exportFormat: "pdf",
+    dataSharing: false,
+    analytics: true,
   })
 
   const handleSettingChange = (key: string, value: any) => {
@@ -65,9 +67,20 @@ export function SettingsPage() {
 
   const exportSettings = () => {
     const settingsData = {
-      notifications: settings.notifications,
-      privacy: settings.privacy,
-      display: settings.display,
+      notifications: {
+        email: settings.emailNotifications,
+        sms: settings.smsNotifications,
+        push: settings.pushNotifications,
+        reports: settings.weeklyReports,
+      },
+      privacy: {
+        dataSharing: settings.dataSharing,
+        analytics: settings.analytics,
+      },
+      display: {
+        theme: settings.theme,
+        language: settings.language,
+      },
       timestamp: new Date().toISOString(),
     }
     const blob = new Blob([JSON.stringify(settingsData, null, 2)], { type: 'application/json' })

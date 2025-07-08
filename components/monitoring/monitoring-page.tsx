@@ -20,7 +20,7 @@ import {
   Zap,
 } from "lucide-react"
 import { LivePatientJourney } from "@/components/visualization/live-patient-journey"
-import { AdvancedNeuralAnalysis } from "@/components/visualization/advanced-neural-analysis"
+// import { AdvancedNeuralAnalysis } from "@/components/visualization/advanced-neural-analysis"
 
 interface VitalSign {
   id: string
@@ -545,7 +545,15 @@ export function MonitoringPage() {
           <TabsContent value="trends" className="space-y-6">
             <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
               <LivePatientJourney />
-              <AdvancedNeuralAnalysis />
+              <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-lg p-6">
+                <h3 className="text-xl font-semibold text-white mb-4">Neural Analysis</h3>
+                <div className="flex items-center justify-center h-64">
+                  <div className="text-center">
+                    <Brain className="h-16 w-16 text-purple-400 mx-auto mb-4" />
+                    <p className="text-slate-300">Advanced neural analysis visualization</p>
+                  </div>
+                </div>
+              </div>
             </div>
           </TabsContent>
 

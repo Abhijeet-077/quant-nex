@@ -148,6 +148,16 @@ export function ProfileManagement() {
     console.log("Avatar upload triggered")
   }
 
+  const achievements = [
+    { id: 1, title: "First Analysis", description: "Completed first brain analysis", date: "2024-01-15" },
+    { id: 2, title: "Expert User", description: "Performed 100+ analyses", date: "2024-02-20" },
+  ]
+
+  const recentActivity = [
+    { id: 1, action: "Completed brain analysis", timestamp: "2024-01-20T10:30:00Z" },
+    { id: 2, action: "Updated profile", timestamp: "2024-01-19T15:45:00Z" },
+  ]
+
   const exportProfile = () => {
     const profileData = {
       profile,

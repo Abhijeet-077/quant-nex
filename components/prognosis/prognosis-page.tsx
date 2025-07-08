@@ -131,6 +131,11 @@ export function PrognosisPage() {
     return "default"
   }
 
+  const patients = [
+    { id: 1, name: "John Doe", diagnosis: "Glioblastoma", prognosis: "6-12 months" },
+    { id: 2, name: "Jane Smith", diagnosis: "Meningioma", prognosis: "Good" },
+  ]
+
   const handleExportReport = () => {
     const reportData = {
       prognosisData,

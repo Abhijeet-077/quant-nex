@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Slider } from "@/components/ui/slider"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { MainLayout } from "../layout/main-layout"
-import { TreatmentEfficacyRadar } from "../visualization/treatment-efficacy-radar"
+// import { TreatmentEfficacyRadar } from "../visualization/treatment-efficacy-radar"
 import { DamagedOrgansModel } from "../visualization/damaged-organs-model"
 import { ModelViewerModal } from "../ui/model-viewer-modal"
 import { ModelIconButton } from "../ui/model-icon-button"
@@ -109,7 +109,13 @@ export function EnhancedTreatmentPage() {
                 </CardTitle>
               </CardHeader>
               <CardContent className="h-[400px]">
-                <TreatmentEfficacyRadar />
+                <div className="flex items-center justify-center h-full">
+                  <div className="text-center">
+                    <Activity className="h-16 w-16 text-green-400 mx-auto mb-4" />
+                    <h3 className="text-xl font-semibold text-white mb-2">Treatment Analysis</h3>
+                    <p className="text-slate-300">Advanced treatment efficacy visualization</p>
+                  </div>
+                </div>
               </CardContent>
             </Card>
           </div>

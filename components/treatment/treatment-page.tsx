@@ -52,6 +52,13 @@ export function TreatmentPage() {
   const [selectedTreatment, setSelectedTreatment] = useState<string | null>(null)
   const [isAddingTreatment, setIsAddingTreatment] = useState(false)
 
+  const treatments = [
+    { id: 1, patient: "John Doe", type: "Surgery", status: "Completed", date: "2024-01-15" },
+    { id: 2, patient: "Jane Smith", type: "Radiation", status: "In Progress", date: "2024-01-20" },
+  ]
+
+
+
   const handleExportPlan = () => {
     const planData = {
       treatments,

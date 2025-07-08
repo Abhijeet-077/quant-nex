@@ -35,7 +35,7 @@ export function LayeredAnatomyModel() {
     return () => clearInterval(interval)
   }, [])
 
-  const toggleLayer = (layer: string) => {
+  const toggleLayer = (layer: keyof typeof visibleLayers) => {
     setVisibleLayers((prev) => ({ ...prev, [layer]: !prev[layer] }))
   }
 
@@ -81,8 +81,8 @@ export function LayeredAnatomyModel() {
               <div key={layer} className="space-y-1">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-2">
-                    <Button variant="ghost" size="sm" onClick={() => toggleLayer(layer)} className="p-1 h-6 w-6">
-                      {visibleLayers[layer] ? (
+                    <Button variant="ghost" size="sm" onClick={() => toggleLayer(layer as keyof typeof visibleLayers)} className="p-1 h-6 w-6">
+                      {visibleLayers[layer as keyof typeof visibleLayers] ? (
                         <Eye className="h-3 w-3 text-green-400" />
                       ) : (
                         <EyeOff className="h-3 w-3 text-gray-500" />

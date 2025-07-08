@@ -67,7 +67,7 @@ class IndianBackendService {
       // Try Firebase authentication first
       try {
         const { signInWithEmailAndPassword } = await import("firebase/auth")
-        const { auth } = await import("./firebase")
+        const { auth }: any = await import("./firebase")
 
         const userCredential = await signInWithEmailAndPassword(auth, credentials.email, credentials.password)
 
@@ -160,7 +160,7 @@ class IndianBackendService {
       // Try Firebase Google authentication
       try {
         const { signInWithPopup, GoogleAuthProvider } = await import("firebase/auth")
-        const { auth } = await import("./firebase")
+        const { auth }: any = await import("./firebase")
 
         const provider = new GoogleAuthProvider()
         provider.addScope("email")
@@ -209,7 +209,7 @@ class IndianBackendService {
     try {
       if (!this.isDemoMode) {
         const { signOut } = await import("firebase/auth")
-        const { auth } = await import("./firebase")
+        const { auth }: any = await import("./firebase")
         await signOut(auth)
       }
 
@@ -237,7 +237,7 @@ class IndianBackendService {
         return null
       }
 
-      const { auth } = await import("./firebase")
+      const { auth }: any = await import("./firebase")
       const { onAuthStateChanged } = await import("firebase/auth")
 
       return new Promise((resolve) => {
