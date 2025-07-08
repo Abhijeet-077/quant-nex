@@ -1,8 +1,8 @@
 "use client"
 
-import { IndianComprehensiveDashboard } from "@/components/dashboard/indian-comprehensive-dashboard"
-import { NewMainLayout } from "@/components/layout/new-main-layout"
-import { ProtectedRoute } from "@/components/auth/protected-route"
+import { IndianComprehensiveDashboard } from "@/components/dashboard"
+import { NewMainLayout } from "@/components/layout"
+import { ProtectedRoute } from "@/components/auth"
 
 export default function Dashboard() {
   return (

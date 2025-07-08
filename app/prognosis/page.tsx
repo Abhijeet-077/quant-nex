@@ -1,8 +1,8 @@
 "use client"
 
 import { PrognosisPage } from "@/components/prognosis/prognosis-page"
-import { NewMainLayout } from "@/components/layout/new-main-layout"
-import { ProtectedRoute } from "@/components/auth/protected-route"
+import { NewMainLayout } from "@/components/layout"
+import { ProtectedRoute } from "@/components/auth"
 
 export default function Prognosis() {
   return (
