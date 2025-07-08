@@ -2,13 +2,13 @@
 
 import { ProtectedRoute } from "@/components/auth/protected-route"
 import { NewMainLayout } from "@/components/layout/new-main-layout"
-import { LifeAnalysisModule } from "@/components/analysis/life-analysis-module"
+import { AdvancedBrainAnalysis } from "@/components/analysis/advanced-brain-analysis"
 
 export default function AnalysisPage() {
   return (
     <ProtectedRoute>
       <NewMainLayout>
-        <LifeAnalysisModule />
+        <AdvancedBrainAnalysis />
       </NewMainLayout>
     </ProtectedRoute>
   )

@@ -35,7 +35,7 @@ export function LandingPage() {
   const [mounted, setMounted] = useState(false)
   const [isNavigating, setIsNavigating] = useState(false)
   const router = useRouter()
-  const { isAuthenticated, isLoading } = useAuth()
+  const { isAuthenticated, isLoading, logout } = useAuth()
 
   const handleNavigation = async (path: string) => {
     console.log('Navigation clicked:', path)
@@ -50,6 +50,11 @@ export function LandingPage() {
     }
   }
 
+  const handleClearSession = async () => {
+    await logout()
+    window.location.reload()
+  }
+
   useEffect(() => {
     setMounted(true)
     setIsVisible(true)
@@ -61,7 +66,11 @@ export function LandingPage() {
 
   // Redirect authenticated users to dashboard
   useEffect(() => {
-    if (mounted && !isLoading && isAuthenticated) {
+    // Check if we're in test mode (prevent auto-redirect for development)
+    const urlParams = new URLSearchParams(window.location.search)
+    const testMode = urlParams.get('test') === 'true'
+
+    if (mounted && !isLoading && isAuthenticated && !testMode) {
       router.push('/dashboard')
     }
   }, [mounted, isLoading, isAuthenticated, router])
@@ -144,6 +153,17 @@ export function LandingPage() {
               </a>
             </div>
             <div className="flex items-center gap-2 sm:gap-4">
+              {/* Debug button - only show in development */}
+              {process.env.NODE_ENV === 'development' && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="bg-red-600 text-white text-xs border-red-500 hover:bg-red-700"
+                  onClick={handleClearSession}
+                >
+                  Clear Session
+                </Button>
+              )}
               <Button
                 variant="outline"
                 size="sm"
@@ -167,7 +187,7 @@ export function LandingPage() {
       </nav>
 
       {/* Hero Section */}
-      <section className="relative z-10 pt-12 sm:pt-16 lg:pt-20 pb-16 sm:pb-24 lg:pb-32">
+      <section className="relative z-40 pt-12 sm:pt-16 lg:pt-20 pb-16 sm:pb-24 lg:pb-32">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
             <div className={`space-y-6 lg:space-y-8 ${isVisible ? "animate-slide-up" : "opacity-0"}`}>
