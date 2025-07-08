@@ -29,12 +29,10 @@ import {
   PieChart,
   LineChart,
 } from "lucide-react"
-import { Advanced4DBrainModel } from "../visualization/advanced-4d-brain-model"
-import { AdvancedBrain3D } from "../visualization/advanced-brain-3d"
 import { RealTimeMonitoringPanel } from "./real-time-monitoring-panel"
 import { EnhancedMedicalCharts } from "./widgets/enhanced-medical-charts"
 import { InteractivePatientFlow } from "./widgets/interactive-patient-flow"
-import { AdvancedBrainVisualization } from "./widgets/advanced-brain-visualization"
+import { Brain3DDiagram } from "../visualization/brain-3d-diagram"
 
 interface IndianPatient {
   id: string
@@ -484,7 +482,7 @@ export function IndianComprehensiveDashboard() {
         </TabsContent>
 
         <TabsContent value="visualization" className="space-y-6">
-          <AdvancedBrain3D />
+          <Brain3DDiagram />
         </TabsContent>
 
         <TabsContent value="hospitals" className="space-y-6">
