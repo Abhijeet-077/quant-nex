@@ -37,16 +37,20 @@ export function LandingPage() {
   const router = useRouter()
   const { isAuthenticated, isLoading, logout } = useAuth()
 
-  const handleNavigation = async (path: string) => {
-    console.log('Navigation clicked:', path)
+  const handleNavigation = (path: string) => {
+    if (isNavigating || isLoading) return
+
     setIsNavigating(true)
     try {
-      // Add a small delay to show loading state
-      await new Promise(resolve => setTimeout(resolve, 300))
-      router.push(path)
+      // Use window.location for more reliable navigation
+      if (typeof window !== 'undefined') {
+        window.location.href = path
+      }
     } catch (error) {
       console.error('Navigation error:', error)
       setIsNavigating(false)
+      // Fallback to router.push
+      router.push(path)
     }
   }
 
@@ -167,7 +171,7 @@ export function LandingPage() {
               <Button
                 variant="outline"
                 size="sm"
-                className="glow-hover bg-transparent text-xs sm:text-sm"
+                className="glow-hover bg-transparent text-xs sm:text-sm relative z-50"
                 onClick={() => handleNavigation('/login')}
                 disabled={isNavigating || isLoading}
               >
@@ -175,7 +179,7 @@ export function LandingPage() {
               </Button>
               <Button
                 size="sm"
-                className="btn-glow-primary text-xs sm:text-sm"
+                className="btn-glow-primary text-xs sm:text-sm relative z-50"
                 onClick={() => handleNavigation('/login')}
                 disabled={isNavigating || isLoading}
               >
@@ -211,7 +215,7 @@ export function LandingPage() {
               <div className="flex flex-col sm:flex-row gap-4">
                 <Button
                   size="lg"
-                  className="btn-glow-primary text-base sm:text-lg px-6 sm:px-8 py-4 sm:py-6 w-full sm:w-auto"
+                  className="btn-glow-primary text-base sm:text-lg px-6 sm:px-8 py-4 sm:py-6 w-full sm:w-auto relative z-50"
                   onClick={() => handleNavigation('/login')}
                   disabled={isNavigating || isLoading}
                 >

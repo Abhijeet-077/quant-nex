@@ -42,6 +42,7 @@ import {
   Clock,
   Layers,
 } from "lucide-react"
+import { Brain3DDiagram } from "@/components/visualization/brain-3d-diagram"
 
 interface BrainScanData {
   region: string
@@ -314,6 +315,9 @@ export function AdvancedBrainAnalysis() {
           </CardContent>
         </Card>
       </div>
+
+      {/* 3D Brain Visualization */}
+      <Brain3DDiagram />
 
       {/* Time Series Analysis */}
       <Card className="bg-gray-900/50 border-teal-500/30">
