@@ -23,9 +23,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { MainLayout } from "../layout/main-layout"
 import { AIInsightsPanel } from "../ai/ai-insights-panel"
-import { LayeredAnatomyModel } from "../visualization/layered-anatomy-model"
-import { DetailedBrainTumor } from "../visualization/detailed-brain-tumor"
-import { DamagedOrgansModel } from "../visualization/damaged-organs-model"
+import { SimpleBrainVisualization } from "../visualization/simple-brain-visualization"
 import { ModelIconButton } from "../ui/model-icon-button"
 import { ModelViewerModal } from "../ui/model-viewer-modal"
 
@@ -232,28 +230,28 @@ export function InnovativeDashboard() {
         <ModelViewerModal
           isOpen={activeModal === "anatomy"}
           onClose={closeModal}
-          title="Layered Anatomical Model"
+          title="Anatomical Analysis"
           modelType="anatomy"
         >
-          <LayeredAnatomyModel />
+          <SimpleBrainVisualization />
         </ModelViewerModal>
 
         <ModelViewerModal
           isOpen={activeModal === "brain"}
           onClose={closeModal}
-          title="Brain Tumor Analysis"
+          title="Brain Analysis"
           modelType="brain"
         >
-          <DetailedBrainTumor />
+          <SimpleBrainVisualization />
         </ModelViewerModal>
 
         <ModelViewerModal
           isOpen={activeModal === "organs"}
           onClose={closeModal}
-          title="Organ Damage Assessment"
+          title="System Assessment"
           modelType="organs"
         >
-          <DamagedOrgansModel />
+          <SimpleBrainVisualization />
         </ModelViewerModal>
       </div>
     </MainLayout>

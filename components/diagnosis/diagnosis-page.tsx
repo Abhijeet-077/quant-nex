@@ -24,8 +24,8 @@ import {
   Camera,
   Zap,
 } from "lucide-react"
-import { AdvancedMedicalBrain3D } from "@/components/visualization/advanced-medical-brain-3d"
-import { FullBodyNeuralNetwork3D } from "@/components/visualization/full-body-neural-network-3d"
+import { SimpleBrainVisualization } from "@/components/visualization/simple-brain-visualization"
+import { SimpleBodyVisualization } from "@/components/visualization/simple-body-visualization"
 
 interface DiagnosisResult {
   condition: string
@@ -311,8 +311,8 @@ export function DiagnosisPage() {
 
           <TabsContent value="imaging" className="space-y-6">
             <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
-              <AdvancedMedicalBrain3D />
-              <FullBodyNeuralNetwork3D />
+              <SimpleBrainVisualization />
+              <SimpleBodyVisualization />
             </div>
           </TabsContent>
 

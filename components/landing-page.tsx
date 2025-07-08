@@ -25,9 +25,9 @@ import { StatisticCounter } from "@/components/ui-effects/statistic-counter"
 import { TestimonialCarousel } from "@/components/landing/testimonial-carousel"
 import { FeatureShowcase } from "@/components/landing/feature-showcase"
 import { AIDemo } from "@/components/landing/ai-demo"
-import { LandingBrain3D } from "@/components/visualization/landing-brain-3d"
-import { FullBodyNeuralNetwork3D } from "@/components/visualization/full-body-neural-network-3d"
-import { CellStructure3D } from "@/components/visualization/3d-cell-structure"
+import { SimpleBrainVisualization } from "@/components/visualization/simple-brain-visualization"
+import { SimpleCellStructure } from "@/components/visualization/simple-cell-structure"
+import { SimpleBodyVisualization } from "@/components/visualization/simple-body-visualization"
 
 export function LandingPage() {
   const [currentFeature, setCurrentFeature] = useState(0)
@@ -252,7 +252,7 @@ export function LandingPage() {
               <div className="relative">
                 <div className="absolute inset-0 bg-gradient-to-r from-teal-400/20 to-blue-400/20 rounded-3xl blur-3xl"></div>
                 <div className="relative">
-                  <LandingBrain3D />
+                  <SimpleBrainVisualization />
                 </div>
               </div>
             </div>
@@ -362,7 +362,7 @@ export function LandingPage() {
                 </CardTitle>
               </CardHeader>
               <CardContent className="pt-0">
-                <CellStructure3D />
+                <SimpleCellStructure />
               </CardContent>
             </Card>
 
@@ -374,7 +374,7 @@ export function LandingPage() {
                 </CardTitle>
               </CardHeader>
               <CardContent className="pt-0">
-                <FullBodyNeuralNetwork3D />
+                <SimpleBodyVisualization />
               </CardContent>
             </Card>
           </div>

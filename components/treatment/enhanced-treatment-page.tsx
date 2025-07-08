@@ -7,7 +7,7 @@ import { Slider } from "@/components/ui/slider"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { MainLayout } from "../layout/main-layout"
 // import { TreatmentEfficacyRadar } from "../visualization/treatment-efficacy-radar"
-import { DamagedOrgansModel } from "../visualization/damaged-organs-model"
+import { SimpleBodyVisualization } from "../visualization/simple-body-visualization"
 import { ModelViewerModal } from "../ui/model-viewer-modal"
 import { ModelIconButton } from "../ui/model-icon-button"
 
@@ -333,7 +333,7 @@ export function EnhancedTreatmentPage() {
           title="Human Body Analysis & Radiation Planning"
           modelType="organs"
         >
-          <DamagedOrgansModel />
+          <SimpleBodyVisualization />
         </ModelViewerModal>
       </div>
     </MainLayout>

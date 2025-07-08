@@ -32,7 +32,7 @@ import {
 import { RealTimeMonitoringPanel } from "./real-time-monitoring-panel"
 import { EnhancedMedicalCharts } from "./widgets/enhanced-medical-charts"
 import { InteractivePatientFlow } from "./widgets/interactive-patient-flow"
-import { Brain3DDiagram } from "../visualization/brain-3d-diagram"
+import { SimpleBrainVisualization } from "../visualization/simple-brain-visualization"
 
 interface IndianPatient {
   id: string
@@ -482,7 +482,7 @@ export function IndianComprehensiveDashboard() {
         </TabsContent>
 
         <TabsContent value="visualization" className="space-y-6">
-          <Brain3DDiagram />
+          <SimpleBrainVisualization />
         </TabsContent>
 
         <TabsContent value="hospitals" className="space-y-6">

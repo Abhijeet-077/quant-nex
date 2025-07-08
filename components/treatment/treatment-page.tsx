@@ -18,7 +18,7 @@ import {
   Plus,
   Edit,
 } from "lucide-react"
-import { EnhancedTreatmentRadar } from "@/components/visualization/enhanced-treatment-radar"
+// import { EnhancedTreatmentRadar } from "@/components/visualization/enhanced-treatment-radar"
 import { TreatmentPlanningInterface } from "./treatment-planning-interface"
 import { MedicationManagementSystem } from "./medication-management-system"
 import { TreatmentProgressTracker } from "./treatment-progress-tracker"
@@ -573,7 +573,19 @@ export function TreatmentPage() {
           <TabsContent value="effectiveness" className="space-y-6">
             <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 lg:gap-6">
               <div className="relative z-10">
-                <EnhancedTreatmentRadar />
+                <Card className="card-glow">
+                  <CardHeader>
+                    <CardTitle className="text-teal-400">Treatment Efficacy Analysis</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="h-64 bg-gradient-to-br from-teal-500/20 to-blue-500/20 rounded-lg flex items-center justify-center">
+                      <div className="text-center">
+                        <Target className="h-16 w-16 text-teal-400 mx-auto mb-3 animate-pulse" />
+                        <p className="text-slate-300">Treatment Efficacy Radar Chart</p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
               </div>
 
               <Card className="card-glow">
